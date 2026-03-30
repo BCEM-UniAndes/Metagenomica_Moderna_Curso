@@ -1,2 +1,9 @@
-# Metagenomica_Moderna_Curso
-Metodologías actualizadas para el análisis computacional de lecturas cortas y largas 
+# Metagenómica Moderna: Análisis de Lecturas Cortas y Largas
+
+La metagenómica moderna ha transformado nuestra capacidad para estudiar comunidades microbianas complejas directamente a partir de muestras ambientales, sin necesidad de cultivo. Gracias al desarrollo de tecnologías de secuenciación masiva, hoy es posible analizar tanto lecturas cortas (e.g., Illumina) como lecturas largas (e.g., Oxford Nanopore, PacBio), lo que permite abordar preguntas biológicas con una resolución taxonómica y funcional sin precedentes.
+
+Este curso está diseñado para ofrecer una formación integral en el análisis bioinformático de datos metagenómicos, cubriendo desde la generación de datos hasta su procesamiento e interpretación. A lo largo del curso, los participantes trabajarán con flujos de trabajo modernos y reproducibles, incorporando herramientas actualizadas para el control de calidad, ensamblaje, clasificación taxonómica, anotación funcional y reconstrucción de genomas metagenómicos.
+
+El curso combina fundamentos conceptuales con ejercicios prácticos, permitiendo a los participantes desarrollar habilidades aplicables a diversos contextos, incluyendo microbioma humano, ecología microbiana, biotecnología y salud.
+
+Este repositorio contiene los materiales, scripts y notebooks utilizados durante el curso, organizados en módulos que reflejan el flujo de análisis típico en estudios metagenómicos contemporáneos. El objetivo es que los participantes no solo aprendan a ejecutar herramientas, sino que comprendan las decisiones metodológicas detrás de cada paso del análisis.
