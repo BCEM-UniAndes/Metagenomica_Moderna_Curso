@@ -2,7 +2,7 @@
 
 ## Objetivo del tutorial
 
-Este tutorial tiene como propósito introducir los conceptos básicos de Linux y del uso de un clúster de cómputo de alto rendimiento, necesarios para desarrollar análisis bioinformáticos en metagenómica de lecturas cortas y largas.
+Este tutorial tiene como propósito introducir los conceptos básicos de Linux y del uso del clúster de cómputo de alto rendimiento Hypatia de la Universidad de los Andes, necesarios para desarrollar análisis bioinformáticos en metagenómica de lecturas cortas y largas.
 
 Al finalizar este tutorial, el estudiante deberá ser capaz de:
 
@@ -26,9 +26,9 @@ La mayoría de herramientas utilizadas en bioinformática y metagenómica se eje
 * Clasificación taxonómica: `Kraken2`, `Bracken`, `Kaiju`, `Centrifuge`, `MetaPhlAn`.
 * Anotación funcional: `eggNOG-mapper`, `PROKKA`, `Bakta`.
 * Binning y recuperación de MAGs: `MetaBAT2`, `MaxBin2`, `CONCOCT`, `DAS Tool`.
-* Ejecución de pipelines reproducibles: `Nextflow`, `Snakemake`, `nf-core`.
+* Ejecución de pipelines reproducibles: `Nextflow`, `Snakemake`, `nf-core`, `Quimme2`.
 
-En metagenómica, los archivos suelen ser muy grandes. Un solo archivo FASTQ puede ocupar varios GB, y algunos análisis requieren muchas CPU, memoria RAM y varios días de ejecución. Por esta razón, los análisis no suelen hacerse en computadores personales, sino en clústeres de cómputo.
+En metagenómica los archivos suelen ser muy grandes. Un solo archivo FASTQ puede ocupar varios GB y algunos análisis requieren muchas CPU, memoria RAM y varios días de ejecución. Por esta razón, los análisis no suelen hacerse en computadores personales, sino en clústeres de cómputo.
 
 ---
 
