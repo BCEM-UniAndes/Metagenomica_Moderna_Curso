@@ -1,4 +1,4 @@
-# Tutorial 00. Introducción a Linux y al uso del clúster para metagenómica
+# Tutorial 00. Introducción a Linux y al uso del clúster
 
 ## Objetivo del tutorial
 
