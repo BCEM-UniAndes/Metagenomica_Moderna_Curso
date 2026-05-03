@@ -1,8 +1,8 @@
-# Tutorial 00. Introducción a Linux y al uso del clúster
+# Tutorial 00. Introducción a Linux/Unix y al uso del clúster
 
 ## Objetivo del tutorial
 
-Este tutorial tiene como propósito introducir los conceptos básicos de Linux y del uso del clúster de cómputo de alto rendimiento Hypatia de la Universidad de los Andes, necesarios para desarrollar análisis bioinformáticos en metagenómica de lecturas cortas y largas.
+Este tutorial tiene como propósito introducir los conceptos básicos de Linux/Unix y del uso del clúster de cómputo de alto rendimiento Hypatia de la Universidad de los Andes. Estos conocimientos son fundamentales para desarrollar análisis bioinformáticos en metagenómica de lecturas cortas y largas, especialmente en contextos donde se requiere trabajar con grandes volúmenes de datos y ejecutar procesos computacionalmente demandantes.
 
 Al finalizar este tutorial, el estudiante deberá ser capaz de:
 
@@ -109,7 +109,7 @@ Un job es una tarea que se envía al clúster para ser ejecutada.
 
 Un job puede ser algo simple, como listar archivos, o algo pesado, como ensamblar un metagenoma.
 
-Ejemplos de jobs:
+Ejemplos de análsis que se jecutan como job:
 
 * Ejecutar control de calidad con `FastQC`.
 * Ensamblar lecturas con `MEGAHIT`.
@@ -118,11 +118,11 @@ Ejemplos de jobs:
 
 ---
 
-## 3.5 Scheduler o gestor de trabajos
+## 3.5 Scheduler/Gestor de trabajos/Manejador de colas
 
 El scheduler es el sistema encargado de organizar los jobs enviados por los usuarios.
 
-En muchos clústeres se utiliza **Slurm**.
+En muchos clústeres, incluido Hypatia, se utiliza **Slurm**.
 
 Slurm decide:
 
@@ -132,7 +132,7 @@ Slurm decide:
 * Cuánta memoria puede usar.
 * Cuánto tiempo máximo puede durar.
 
-Los usuarios no ejecutan análisis pesados directamente en el nodo de login. En su lugar, crean un script de trabajo y lo envían al scheduler.
+Los usuarios no deben ejecutar análisis pesados directamente en el nodo de login. En su lugar, crean un script de trabajo y lo envían al scheduler.
 
 ---
 
@@ -145,7 +145,6 @@ Cada partición puede tener límites diferentes de:
 * Tiempo máximo de ejecución.
 * Memoria disponible.
 * Número de CPU.
-* Tipo de nodo.
 * Prioridad o finalidad.
 
 Un ejemplo general de particiones es:
@@ -233,17 +232,7 @@ Ejemplo de salida:
 
 # 7. Comandos básicos de Linux
 
-## 7.1 Ver la ruta actual: `pwd`
-
-```bash
-pwd
-```
-
-Muestra la carpeta actual.
-
----
-
-## 7.2 Listar archivos: `ls`
+## 7.1 Listar archivos: `ls`
 
 ```bash
 ls
@@ -279,7 +268,7 @@ Lista archivos que terminan en `.fastq.gz`.
 
 ---
 
-## 7.3 Cambiar de carpeta: `cd`
+## 7.2 Cambiar de carpeta: `cd`
 
 ```bash
 cd nombre_carpeta
@@ -311,7 +300,7 @@ cd /hpcfs/home/usuario/proyecto_metagenomica
 
 ---
 
-## 7.4 Crear carpetas: `mkdir`
+## 7.3 Crear carpetas: `mkdir`
 
 ```bash
 mkdir resultados
@@ -331,7 +320,7 @@ mkdir -p proyecto_metagenomica/{raw_data,results,scripts,logs}
 
 ---
 
-## 7.5 Copiar archivos: `cp`
+## 7.4 Copiar archivos: `cp`
 
 ```bash
 cp archivo.txt copia_archivo.txt
@@ -351,7 +340,7 @@ cp -r carpeta_original carpeta_copia
 
 ---
 
-## 7.6 Mover o renombrar archivos: `mv`
+## 7.5 Mover o renombrar archivos: `mv`
 
 Mover un archivo:
 
@@ -367,7 +356,7 @@ mv viejo_nombre.txt nuevo_nombre.txt
 
 ---
 
-## 7.7 Eliminar archivos y carpetas: `rm`
+## 7.6 Eliminar archivos y carpetas: `rm`
 
 Eliminar un archivo:
 
@@ -391,7 +380,7 @@ rm -rf carpeta
 
 ---
 
-## 7.8 Visualizar archivos pequeños: `cat`
+## 7.7 Visualizar archivos pequeños: `cat`
 
 ```bash
 cat archivo.txt
@@ -401,7 +390,7 @@ Muestra todo el contenido del archivo en pantalla. Se recomienda solo para archi
 
 ---
 
-## 7.9 Visualizar archivos página por página: `more` y `less`
+## 7.8 Visualizar archivos página por página: `more` y `less`
 
 ```bash
 more archivo.txt
@@ -419,7 +408,7 @@ Con `less`, se puede navegar usando:
 
 ---
 
-## 7.10 Ver las primeras líneas: `head`
+## 7.9 Ver las primeras líneas: `head`
 
 ```bash
 head archivo.txt
@@ -439,7 +428,7 @@ zcat muestra_R1.fastq.gz | head
 
 ---
 
-## 7.11 Ver las últimas líneas: `tail`
+## 7.10 Ver las últimas líneas: `tail`
 
 ```bash
 tail archivo.log
@@ -461,11 +450,7 @@ Esto es muy útil para revisar logs de jobs mientras se están ejecutando.
 
 ---
 
-## 7.12 Contar líneas, palabras y caracteres: `wc`
-
-```bash
-wc archivo.txt
-```
+## 7.11 Contar líneas, palabras y caracteres: `wc`
 
 Contar solo líneas:
 
@@ -473,23 +458,15 @@ Contar solo líneas:
 wc -l archivo.txt
 ```
 
-Ejemplo para contar secuencias en un FASTQ comprimido:
+Ejemplo para contar el número de archivos FASTQ comprimidos dentro de un directorio:
 
 ```bash
-zcat muestra.fastq.gz | wc -l
+ls  01_raw_reads/*.fastq.gz | wc -l
 ```
-
-Como cada lectura FASTQ ocupa 4 líneas, el número aproximado de lecturas sería:
-
-```bash
-zcat muestra.fastq.gz | wc -l
-```
-
-Luego se divide entre 4.
 
 ---
 
-## 7.13 Buscar texto dentro de archivos: `grep`
+## 7.12 Buscar texto dentro de archivos: `grep`
 
 ```bash
 grep "palabra" archivo.txt
@@ -515,7 +492,7 @@ grep -i "error" *.log
 
 ---
 
-## 7.14 Comprimir y descomprimir archivos
+## 7.13 Comprimir y descomprimir archivos
 
 Comprimir con gzip:
 
@@ -549,7 +526,7 @@ tar -czvf resultados.tar.gz results/
 
 ---
 
-## 7.15 Ver espacio en disco
+## 7.14 Ver espacio en disco
 
 Ver espacio general:
 
@@ -568,22 +545,6 @@ Ver el tamaño de todas las carpetas del directorio actual:
 ```bash
 du -sh *
 ```
-
----
-
-## 7.16 Ver procesos activos
-
-```bash
-top
-```
-
-También puede usarse:
-
-```bash
-htop
-```
-
-si está disponible en el sistema.
 
 ---
 
@@ -633,7 +594,7 @@ grep -c "^>" archivo.fasta
 ## 8.4 Ver nombres de secuencias en un FASTA
 
 ```bash
-grep "^>" archivo.fasta | head
+grep "^>" archivo.fasta
 ```
 
 ---
@@ -678,38 +639,47 @@ Ejemplo:
 
 ```text
 proyecto_metagenomica/
-├── raw_data/
-│   ├── muestra1_R1.fastq.gz
-│   ├── muestra1_R2.fastq.gz
-│   ├── muestra2_R1.fastq.gz
-│   └── muestra2_R2.fastq.gz
-├── samplesheets/
-│   └── samplesheet.csv
-├── scripts/
-│   ├── fastqc.sh
-│   ├── kraken2.sh
-│   └── nextflow_taxprofiler.sh
-├── results/
-│   ├── fastqc/
-│   ├── kraken2/
-│   └── multiqc/
-├── logs/
+├── 01_raw_data/
+│   ├── fastq/
+│   │   ├── muestra1_R1.fastq.gz
+│   │   ├── muestra1_R2.fastq.gz
+│   │   ├── muestra2_R1.fastq.gz
+│   │   └── muestra2_R2.fastq.gz
+│   ├── scripts/
+│   ├── results/
+├── 02_quality_control/
+│   ├── scripts/
+│   │   ├── run_fastqc.sh
+│   │   └── run_multiqc.sh
+│   ├── results/
+│   │   ├── fastqc_out/
+│   │   └── multiqc_out/
+│   └── logs/
+├── 03_taxonomic_classification/
+│   ├── scripts/
+│   │   └── run_kraken2.sh
+│   ├── results/
+│   │   └── kraken2_out/
+│   └── logs/
+├── 04_assembly/
+│   ├── scripts/
+│   │   └── run_assembly_metaspades.sh
+│   ├── results/
+│   │   └── metaspades_out/
+│   └── logs/
+
 └── README.md
-```
-
-Crear esta estructura:
-
-```bash
-mkdir -p proyecto_metagenomica/{raw_data,samplesheets,scripts,results,logs}
 ```
 
 ---
 
 # 11. Introducción a Slurm
 
-Slurm es el sistema que permite enviar trabajos al clúster.
+Slurm es el sistema que permite administrar y enviar trabajos al clúster. Su función principal es distribuir los recursos disponibles, como CPUs, memoria y tiempo de ejecución, entre los usuarios que necesitan correr análisis en los nodos de cómputo.
 
-Los comandos más importantes son:
+En un clúster, los análisis no deben ejecutarse directamente en el nodo de login. El nodo de login se usa para preparar archivos, revisar resultados, editar scripts y enviar trabajos. Cuando se necesita ejecutar un análisis, se debe solicitar acceso a los recursos del clúster mediante Slurm.
+
+Los comandos más importantes de Slurm son:
 
 | Comando             | Función                      |
 | ------------------- | ---------------------------- |
@@ -719,6 +689,19 @@ Los comandos más importantes son:
 | `sinfo`             | Ver particiones y nodos      |
 | `scontrol show job` | Ver detalles de un job       |
 | `sacct`             | Consultar jobs finalizados   |
+| `srun`              | Solicitar una sesión interactiva |
+
+Existen dos formas comunes de trabajar con Slurm. La primera es enviar un job mediante un script con `sbatch`, lo cual es útil para análisis largos o procesos que ya están definidos. La segunda es solicitar una sesión interactiva con `srun`, que permite trabajar directamente en un nodo de cómputo durante un tiempo determinado.
+
+Las sesiones interactivas son útiles para probar comandos, cargar módulos, revisar que un programa funcione correctamente o depurar un análisis antes de enviarlo como job. De esta forma, se evita usar el nodo de login para tareas que requieren más recursos.
+
+Para solicitar una sesión interactiva en un nodo de cómputo se puede usar el siguiente comando:
+
+```
+srun --cpus-per-task=4 --mem=8G --time=04:00:00 --pty bash
+```
+
+Este comando solicita una sesión interactiva de 4 horas, con 4 CPUs y 8 GB de memoria RAM. La opción --pty bash indica que se abrirá una terminal interactiva en el nodo asignado. Una vez dentro de la sesión, se pueden cargar módulos, probar comandos y ejecutar análisis pequeños o pruebas preliminares sin usar el nodo de login.
 
 ---
 
@@ -743,13 +726,11 @@ Contenido del archivo:
 
 #SBATCH --job-name=primer_job
 #SBATCH --partition=short
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=4G
 #SBATCH --time=00:10:00
-#SBATCH --output=logs/primer_job_%j.out
-#SBATCH --error=logs/primer_job_%j.err
+#SBATCH -o primer_job_%j.out
+#SBATCH -e primer_job_%j.err
 
 # Mostrar información básica
 echo "El job inició en:"
@@ -792,26 +773,24 @@ Submitted batch job 123456
 | ----------------- | ------------------------------------------ |
 | `--job-name`      | Nombre del job                             |
 | `--partition`     | Partición donde se ejecutará               |
-| `--nodes`         | Número de nodos solicitados                |
-| `--ntasks`        | Número de tareas                           |
 | `--cpus-per-task` | Número de CPU por tarea                    |
 | `--mem`           | Memoria RAM solicitada                     |
 | `--time`          | Tiempo máximo de ejecución                 |
-| `--output`        | Archivo donde se guarda la salida estándar |
-| `--error`         | Archivo donde se guardan los errores       |
+| `-o`              | Archivo donde se guarda la salida estándar |
+| `-e`              | Archivo donde se guardan los errores       |
 
 El símbolo `%j` se reemplaza automáticamente por el ID del job.
 
 Ejemplo:
 
 ```bash
-#SBATCH --output=logs/job_%j.out
+#SBATCH -o job_%j.out
 ```
 
 Si el ID del job es `123456`, el archivo será:
 
 ```text
-logs/job_123456.out
+job_123456.out
 ```
 
 ---
@@ -880,13 +859,11 @@ Este job ejecuta `FastQC` sobre archivos FASTQ comprimidos.
 
 #SBATCH --job-name=fastqc_metagenomica
 #SBATCH --partition=short
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=8G
 #SBATCH --time=02:00:00
-#SBATCH --output=logs/fastqc_%j.out
-#SBATCH --error=logs/fastqc_%j.err
+#SBATCH -o fastqc_%j.out
+#SBATCH -e fastqc_%j.err
 
 # Cargar módulo, si está disponible en el clúster
 module load fastqc
@@ -908,37 +885,7 @@ sbatch scripts/fastqc.sh
 
 ---
 
-# 17. Ejemplo de job para Kraken2
-
-```bash
-#!/bin/bash
-
-#SBATCH --job-name=kraken2_metagenomica
-#SBATCH --partition=medium
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=80G
-#SBATCH --time=1-00:00:00
-#SBATCH --output=logs/kraken2_%j.out
-#SBATCH --error=logs/kraken2_%j.err
-
-module load kraken2
-
-mkdir -p results/kraken2
-
-kraken2 \
-  --db /ruta/a/base_de_datos_kraken2 \
-  --threads 16 \
-  --paired \
-  raw_data/muestra_R1.fastq.gz raw_data/muestra_R2.fastq.gz \
-  --report results/kraken2/muestra.report \
-  --output results/kraken2/muestra.output
-```
-
----
-
-# 18. Ejemplo de job para Nextflow
+# 17. Ejemplo de job para Nextflow
 
 Muchos pipelines modernos, como los de `nf-core`, se ejecutan con Nextflow.
 
@@ -949,13 +896,11 @@ Ejemplo general:
 
 #SBATCH --job-name=nfcore_taxprofiler
 #SBATCH --partition=medium
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=80G
 #SBATCH --time=4-00:00:00
-#SBATCH --output=logs/taxprofiler_%j.out
-#SBATCH --error=logs/taxprofiler_%j.err
+#SBATCH -o taxprofiler_%j.out
+#SBATCH -e taxprofiler_%j.err
 
 module load jdk
 module load singularity
@@ -973,9 +918,9 @@ nextflow run nf-core/taxprofiler \
 
 ---
 
-# 19. Buenas prácticas en el clúster
+# 18. Buenas prácticas en el clúster
 
-## 19.1 No ejecutar análisis pesados en el nodo de login
+## 18.1 No ejecutar análisis pesados en el nodo de login
 
 El nodo de login es compartido por todos los usuarios. Se debe usar para:
 
@@ -985,16 +930,9 @@ El nodo de login es compartido por todos los usuarios. Se debe usar para:
 * Enviar jobs.
 * Revisar logs ligeros.
 
-No se debe usar para:
-
-* Ejecutar ensamblajes.
-* Correr Kraken2 con bases grandes.
-* Ejecutar pipelines completos.
-* Procesar muchos archivos FASTQ.
-
 ---
 
-## 19.2 Pedir recursos razonables
+## 18.2 Pedir recursos razonables
 
 Solicitar demasiados recursos puede hacer que el job espere más tiempo en cola. Solicitar pocos recursos puede hacer que falle.
 
@@ -1014,35 +952,7 @@ Ejemplo razonable:
 
 ---
 
-## 19.3 Revisar siempre los logs
-
-Después de ejecutar un job, revisar:
-
-```bash
-ls -lh logs/
-```
-
-Ver salida:
-
-```bash
-less logs/job_123456.out
-```
-
-Ver errores:
-
-```bash
-less logs/job_123456.err
-```
-
-Buscar errores:
-
-```bash
-grep -i "error" logs/*.err
-```
-
----
-
-## 19.4 Usar nombres claros
+## 19.3 Usar nombres claros
 
 Evitar nombres como:
 
@@ -1056,16 +966,14 @@ final_final.sh
 Preferir nombres informativos:
 
 ```text
-01_fastqc.sh
-02_fastp_trim.sh
-03_kraken2.sh
-04_bracken.sh
-05_multiqc.sh
+run_fastqc.sh
+run_fastp_trim.sh
+run_kraken2.sh
 ```
 
 ---
 
-## 19.5 Mantener una estructura reproducible
+## 18.4 Mantener una estructura reproducible
 
 Todo análisis debería tener:
 
@@ -1077,7 +985,7 @@ Todo análisis debería tener:
 
 ---
 
-# 20. Editores de texto en terminal
+# 19. Editores de texto en terminal
 
 ## 20.1 Usar `nano`
 
@@ -1100,7 +1008,7 @@ Comandos básicos:
 
 ---
 
-# 21. Permisos de ejecución
+# 20. Permisos de ejecución
 
 Para ejecutar un script directamente, primero se deben dar permisos de ejecución:
 
@@ -1111,7 +1019,7 @@ chmod +x script.sh
 Luego se puede ejecutar:
 
 ```bash
-./script.sh
+bash script.sh
 ```
 
 Sin embargo, en el clúster los jobs normalmente se envían con:
@@ -1122,7 +1030,7 @@ sbatch script.sh
 
 ---
 
-# 22. Variables útiles en Bash
+# 21. Variables útiles en Bash
 
 Una variable guarda información que puede reutilizarse.
 
@@ -1150,7 +1058,7 @@ ls -lh $R1 $R2
 
 ---
 
-# 23. Bucles básicos en Bash
+# 22. Bucles básicos en Bash
 
 Un bucle permite repetir una acción sobre varios archivos.
 
@@ -1174,72 +1082,74 @@ for file in raw_data/*.fastq.gz
 
 ---
 
-# 24. Ejercicio práctico 1: crear estructura del proyecto
+# 23. Ejercicio práctico 1: crear estructura del proyecto
+
+En este ejercicio se creará una estructura básica de carpetas para organizar los archivos del curso dentro del clúster.
 
 1. Conectarse al clúster.
-2. Crear una carpeta llamada `curso_metagenomica`.
-3. Crear las subcarpetas `raw_data`, `scripts`, `results`, `logs` y `samplesheets`.
-4. Verificar la estructura con `ls`.
-
-Comandos sugeridos:
-
-```bash
-mkdir -p curso_metagenomica/{raw_data,scripts,results,logs,samplesheets}
-cd curso_metagenomica
-ls -lh
-```
+2. Cree una carpeta personal usando la inicial de su nombre y su apellido. Por ejemplo: `a_soto`
+3. Ingrese a su carpeta personal y cree una carpeta llamada `curso_metagenomica_test`.
+4. Dentro de `curso_metagenomica_test`, cree la carpeta `01_raw_data` y, dentro de esta, los directorios `scripts`, `results`, `logs` y `samplesheets`.
+5. Verifique que la estructura se haya creado correctamente usando `ls`.
 
 ---
 
-# 25. Ejercicio práctico 2: crear y enviar un primer job
+# 24. Ejercicio práctico 2: crear y enviar un primer job
 
-Crear el archivo:
+En este ejercicio se creará un primer script de Slurm. El job no ejecuta un análisis pesado; solamente imprime información básica sobre la ejecución, como la fecha, el nodo asignado, la carpeta de trabajo y los archivos disponibles.
+
+Primero, asegúrese de estar dentro de la carpeta `01_raw_data`:
+
+Cree el archivo del script usando `nano` o `vi`:
 
 ```bash
 nano scripts/test_cluster.sh
 ```
 
-Contenido:
+Copie el siguiente contenido dentro del archivo:
 
 ```bash
 #!/bin/bash
 
 #SBATCH --job-name=test_cluster
 #SBATCH --partition=short
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=1G
 #SBATCH --time=00:05:00
-#SBATCH --output=logs/test_cluster_%j.out
-#SBATCH --error=logs/test_cluster_%j.err
+#SBATCH -o logs/test_cluster_%j.out
+#SBATCH -e logs/test_cluster_%j.err
 
 echo "Hola, este es mi primer job en el clúster"
+
 echo "Fecha de inicio:"
 date
+
 echo "Nodo donde corre el job:"
 hostname
+
 echo "Carpeta actual:"
 pwd
+
 echo "Archivos disponibles:"
 ls -lh
+
 echo "Fecha de finalización:"
 date
 ```
 
-Enviar:
+Guarde el archivo y salga del editor de texto. Luego, envíe el job al clúster usando sbatch:
 
 ```bash
 sbatch scripts/test_cluster.sh
 ```
 
-Revisar estado:
+Para revisar si el job está en cola o en ejecución, use:
 
 ```bash
 squeue -u $USER
 ```
 
-Revisar resultados:
+Cuando el job termine, revise los archivos de salida y error dentro de la carpeta `logs`:
 
 ```bash
 ls -lh logs/
@@ -1249,80 +1159,7 @@ less logs/test_cluster_*.err
 
 ---
 
-# 26. Errores frecuentes
-
-## 26.1 El job queda mucho tiempo en cola
-
-Posibles causas:
-
-* Se solicitaron demasiadas CPU.
-* Se solicitó demasiada memoria.
-* La partición está ocupada.
-* El tiempo solicitado es muy largo.
-
-Revisar con:
-
-```bash
-squeue -u $USER
-scontrol show job JOBID
-```
-
----
-
-## 26.2 El job falla por memoria
-
-Mensaje típico:
-
-```text
-Out of memory
-Killed
-OOM
-```
-
-Solución:
-
-* Aumentar `--mem`.
-* Usar una partición con más memoria.
-* Reducir el tamaño de entrada.
-* Revisar si el programa permite dividir el análisis por muestras.
-
----
-
-## 26.3 El job falla por tiempo
-
-Mensaje típico:
-
-```text
-TIMEOUT
-```
-
-Solución:
-
-* Aumentar `--time`.
-* Usar una partición de mayor duración.
-* Optimizar el comando.
-
----
-
-## 26.4 El comando no existe
-
-Mensaje típico:
-
-```text
-command not found
-```
-
-Posibles soluciones:
-
-```bash
-module avail
-module load nombre_programa
-which nombre_programa
-```
-
----
-
-# 27. Resumen de comandos esenciales
+# 25. Resumen de comandos esenciales
 
 | Comando   | Uso                                    |
 | --------- | -------------------------------------- |
@@ -1354,7 +1191,7 @@ which nombre_programa
 
 ---
 
-# 28. Recomendaciones finales
+# 26. Recomendaciones finales
 
 Antes de ejecutar cualquier análisis metagenómico en el clúster:
 
@@ -1368,39 +1205,3 @@ Antes de ejecutar cualquier análisis metagenómico en el clúster:
 8. No borrar archivos de trabajo sin estar seguro.
 
 La bioinformática reproducible depende tanto del análisis como de la organización. Un buen manejo de Linux y del clúster es fundamental para trabajar de forma eficiente, segura y ordenada en proyectos de metagenómica.
-
----
-
-# 29. Actividad sugerida para entregar
-
-Cada estudiante debe crear una carpeta en el clúster con la siguiente estructura:
-
-```text
-apellido_nombre_metagenomica/
-├── raw_data/
-├── scripts/
-├── results/
-├── logs/
-└── README.md
-```
-
-Dentro de `scripts/`, debe incluir un job llamado:
-
-```text
-test_cluster.sh
-```
-
-El job debe imprimir:
-
-* Nombre del estudiante.
-* Fecha y hora.
-* Nodo donde se ejecutó.
-* Ruta actual.
-* Lista de archivos del proyecto.
-
-El estudiante debe entregar:
-
-1. Captura o contenido del archivo `.out`.
-2. Captura o contenido del archivo `.err`.
-3. El script `test_cluster.sh`.
-4. Una breve explicación de qué significa cada directiva `#SBATCH` utilizada.
