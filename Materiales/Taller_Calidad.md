@@ -557,22 +557,253 @@ ls -lh taxprofiler_job.e*
 
 # Explicación de los parámetros del job de `nf-core/taxprofiler`
 
-El script `taxprofiler_job.sh` permite ejecutar `nf-core/taxprofiler` en el cluster usando el sistema de colas Slurm. En la primera parte del script se definen los recursos computacionales mediante las instrucciones `#SBATCH`. El parámetro `--job-name=nfcore_taxprofiler` asigna un nombre al trabajo, lo cual permite identificarlo fácilmente en la cola de Slurm. La opción `-p medium` indica que el job se enviará a la partición o cola `medium`. Las opciones `-N 1` y `-n 1` indican que se usará un nodo y una tarea principal. El parámetro `--cpus-per-task=16` reserva 16 CPUs para la ejecución del pipeline, mientras que `--mem=80G` solicita 80 GB de memoria RAM. La opción `--time=4-00:00:00` define un tiempo máximo de ejecución de cuatro días. Las opciones `--mail-user` y `--mail-type=ALL` permiten recibir notificaciones por correo electrónico cuando el trabajo inicia, termina o falla. Finalmente, `-o taxprofiler_job.o%j` y `-e taxprofiler_job.e%j` indican los archivos donde se guardarán la salida estándar y los errores del job; `%j` corresponde al identificador del trabajo asignado por Slurm.
 
-Después de definir los recursos, el script carga los módulos necesarios para ejecutar el pipeline. `module load jdk/19.0.2` carga Java, que es necesario para ejecutar Nextflow. `module load singularity/3.7.1` carga Singularity, el sistema de contenedores que permite ejecutar las herramientas del pipeline sin instalarlas manualmente. `module load nextflow/25.04.8` carga Nextflow, que es el motor encargado de organizar y ejecutar todos los procesos del flujo de trabajo. El comando `hash -r` limpia la memoria interna de rutas de comandos de la shell, para asegurar que se usen las versiones recién cargadas. Luego, `nextflow -version` y `java -version` imprimen las versiones de Nextflow y Java, lo cual es útil para documentar y diagnosticar la ejecución.
+El archivo `taxprofiler_job.sh` es el script que enviamos a Slurm para ejecutar `nf-core/taxprofiler` en el cluster.  
+Este job tiene tres partes principales:
 
-La ejecución principal comienza con `nextflow run nf-core/taxprofiler`, que indica que se ejecutará el pipeline `taxprofiler` de nf-core. La opción `-r 1.2.6` fija la versión del pipeline, asegurando que todos los estudiantes usen exactamente la misma versión. La opción `-resume` permite retomar una ejecución previa en caso de que el pipeline se haya detenido o haya fallado; Nextflow reutiliza los procesos que ya terminaron correctamente. El parámetro `-profile singularity` indica que el pipeline debe ejecutarse usando contenedores de Singularity. La opción `-c` permite indicar un archivo `nextflow.config` personalizado, donde se definen recursos como CPUs, memoria, tiempo y cola de ejecución para los procesos del pipeline.
+1. Solicitud de recursos al cluster.
+2. Carga de módulos necesarios.
+3. Ejecución del pipeline con los parámetros del taller.
 
-El parámetro `--input` indica la ruta del archivo `samplesheet.csv`, que contiene la información de las muestras que se analizarán. En este archivo se especifica el nombre de cada muestra, el identificador de corrida, la plataforma de secuenciación y las rutas a los archivos FASTQ forward y reverse.
+---
 
-El parámetro `--databases` apunta al archivo `metadata/db.csv`. Aunque en este taller no vamos a realizar clasificación taxonómica, `taxprofiler` solicita este archivo durante la validación inicial. Por eso se crea un archivo mínimo de base de datos, pero no se activan herramientas como Kraken2, Bracken o Krona.
+## 1. Recursos solicitados a Slurm
 
-El parámetro `--outdir` define la carpeta donde se guardarán todos los resultados del pipeline. La opción `--shortread_qc_tool fastp` indica que se usará `fastp` como herramienta de limpieza y control de calidad para lecturas cortas. `fastp` permite filtrar lecturas de baja calidad, recortar regiones problemáticas y generar reportes de calidad en formato HTML y JSON.
+La primera parte del script contiene las líneas que empiezan con `#SBATCH`.  
+Estas líneas le indican al cluster cuántos recursos necesita el trabajo.
 
-La opción `--save_preprocessed_reads` indica que se deben guardar las lecturas después del preprocesamiento realizado por `fastp`. Esto es importante porque permite revisar o reutilizar las lecturas limpias en análisis posteriores. La opción `--perform_shortread_hostremoval` activa la remoción de lecturas del huésped. En este caso, el objetivo es remover lecturas que alinean contra el genoma humano. Para esto, el parámetro `--hostremoval_reference` indica el archivo FASTA del genoma humano de referencia, en este caso `GRCh38.p14_genomic.fna`. Además, el parámetro `--shortread_hostremoval_index` indica la carpeta donde se encuentra el índice de Bowtie2 previamente construido a partir de ese genoma. Bowtie2 usa este índice para alinear rápidamente las lecturas contra el genoma humano y separar las lecturas que corresponden al huésped de las que no alinean.
+| Parámetro | Función |
+|---|---|
+| `--job-name=nfcore_taxprofiler` | Nombre del job en la cola de Slurm. |
+| `-p medium` | Cola o partición donde se ejecutará el job. |
+| `-N 1` | Número de nodos solicitados. |
+| `-n 1` | Número de tareas principales. |
+| `--cpus-per-task=16` | Número de CPUs disponibles para el job. |
+| `--mem=80G` | Memoria RAM solicitada. |
+| `--time=4-00:00:00` | Tiempo máximo de ejecución: 4 días. |
+| `--mail-user` | Correo para recibir notificaciones. |
+| `--mail-type=ALL` | Envía correo al iniciar, terminar o fallar. |
+| `-o taxprofiler_job.o%j` | Archivo de salida estándar. |
+| `-e taxprofiler_job.e%j` | Archivo de errores. |
 
-La opción `--save_hostremoval_unmapped` permite guardar las lecturas que no alinearon contra el genoma humano. Estas lecturas son importantes porque representan la fracción no humana de la muestra y son las que podrían usarse posteriormente para análisis metagenómicos. La opción `--save_hostremoval_bam` guarda los archivos BAM generados durante la alineación contra el huésped, lo cual permite revisar o auditar el proceso de remoción si es necesario. Finalmente, `--save_analysis_ready_fastqs` guarda los FASTQ finales listos para análisis posteriores. En este taller, esos archivos representan las lecturas procesadas, filtradas y con remoción de huésped.
+:::{.callout-note}
+El símbolo `%j` representa el identificador del job asignado por Slurm.  
+Por ejemplo, si el job tiene ID `452932`, los archivos pueden llamarse `taxprofiler_job.o452932` y `taxprofiler_job.e452932`.
+:::
 
+---
+
+## 2. Módulos necesarios
+
+Antes de ejecutar el pipeline, cargamos los programas que necesita `taxprofiler`.
+
+```{bash, eval=FALSE}
+module load jdk/19.0.2
+module load singularity/3.7.1
+module load nextflow/25.04.8
+```
+
+| Módulo | ¿Para qué sirve? |
+|---|---|
+| `jdk/19.0.2` | Carga Java, necesario para ejecutar Nextflow. |
+| `singularity/3.7.1` | Permite usar contenedores con las herramientas bioinformáticas. |
+| `nextflow/25.04.8` | Ejecuta y organiza el flujo de trabajo. |
+
+Después verificamos las versiones:
+
+```{bash, eval=FALSE}
+nextflow -version
+java -version
+```
+
+Esto es útil para dejar registro de la ejecución y para diagnosticar errores si el pipeline falla.
+
+---
+
+## 3. Ejecución del pipeline
+
+La ejecución principal comienza con:
+
+```{bash, eval=FALSE}
+nextflow run nf-core/taxprofiler
+```
+
+Esto le dice a Nextflow que vamos a ejecutar el pipeline `nf-core/taxprofiler`.
+
+---
+
+## 4. Parámetros generales de Nextflow
+
+| Parámetro | Significado |
+|---|---|
+| `-r 1.2.6` | Ejecuta la versión `1.2.6` del pipeline. |
+| `-resume` | Retoma una ejecución previa sin repetir procesos ya completados. |
+| `-profile singularity` | Usa contenedores de Singularity. |
+| `-c nextflow.config` | Usa un archivo de configuración personalizado. |
+
+:::{.callout-tip}
+La opción `-resume` es muy útil en el cluster.  
+Si el pipeline falla por una ruta incorrecta, falta de memoria o un error temporal, se puede corregir el problema y volver a ejecutar el mismo job sin empezar desde cero.
+:::
+
+---
+
+## 5. Archivos de entrada y salida
+
+Estos parámetros indican qué archivos usa el pipeline y dónde guardará los resultados.
+
+| Parámetro | Función |
+|---|---|
+| `--input` | Ruta del archivo `samplesheet.csv`. |
+| `--databases` | Ruta del archivo `db.csv`. |
+| `--outdir` | Carpeta donde se guardan los resultados. |
+
+Ejemplo:
+
+```{bash, eval=FALSE}
+--input /hpcfs/home/cursos/metagenomica_moderna/estudiantes/j_meza/taller_shortReads/samplesheet.csv
+--databases /hpcfs/home/cursos/metagenomica_moderna/estudiantes/j_meza/taller_shortReads/metadata/db.csv
+--outdir /hpcfs/home/cursos/metagenomica_moderna/estudiantes/j_meza/taller_shortReads/output
+```
+
+:::{.callout-warning}
+En este taller usamos `--databases` solo porque `taxprofiler` lo solicita durante la validación inicial.  
+No vamos a realizar clasificación taxonómica, porque no activamos herramientas como `Kraken2`, `Bracken` o `Krona`.
+:::
+
+---
+
+## 6. Control de calidad con `fastp`
+
+Para limpiar las lecturas cortas usamos `fastp`.
+
+```{bash, eval=FALSE}
+--shortread_qc_tool fastp
+--save_preprocessed_reads
+```
+
+| Parámetro | Función |
+|---|---|
+| `--shortread_qc_tool fastp` | Usa `fastp` para limpiar lecturas cortas. |
+| `--save_preprocessed_reads` | Guarda las lecturas después del procesamiento. |
+
+`fastp` permite:
+
+- Remover bases de baja calidad.
+- Detectar y recortar adaptadores.
+- Filtrar lecturas problemáticas.
+- Generar reportes `.html` y `.json`.
+
+:::{.callout-note}
+En este taller, los reportes de `fastp` serán una de las salidas principales para evaluar la calidad antes y después del trimming.
+:::
+
+---
+
+## 7. Remoción de lecturas del huésped
+
+Después del control de calidad, removemos lecturas que alinean contra el genoma humano.
+
+```{bash, eval=FALSE}
+--perform_shortread_hostremoval
+--hostremoval_reference /hpcfs/home/cursos/metagenomica_moderna/Prueba/Databases/GenomeHost/GRCh38.p14_genomic.fna
+--shortread_hostremoval_index /hpcfs/home/cursos/metagenomica_moderna/estudiantes/j_meza/taller_shortReads/Bowtie2/INDEX
+```
+
+| Parámetro | Función |
+|---|---|
+| `--perform_shortread_hostremoval` | Activa la remoción de huésped para lecturas cortas. |
+| `--hostremoval_reference` | FASTA del genoma humano de referencia. |
+| `--shortread_hostremoval_index` | Carpeta con el índice de Bowtie2. |
+
+En este taller usamos el genoma humano de referencia:
+
+```{bash, eval=FALSE}
+GRCh38.p14_genomic.fna
+```
+
+Bowtie2 compara las lecturas contra este genoma y separa:
+
+- Lecturas que alinean contra humano.
+- Lecturas que no alinean contra humano.
+
+Las lecturas que no alinean son las más importantes para análisis metagenómicos posteriores.
+
+---
+
+## 8. Archivos que queremos guardar
+
+Estas opciones indican qué resultados intermedios y finales queremos conservar.
+
+```{bash, eval=FALSE}
+--save_hostremoval_unmapped
+--save_hostremoval_bam
+--save_analysis_ready_fastqs
+```
+
+| Parámetro | Resultado |
+|---|---|
+| `--save_hostremoval_unmapped` | Guarda las lecturas que no alinearon contra el genoma humano. |
+| `--save_hostremoval_bam` | Guarda archivos BAM de la alineación contra el huésped. |
+| `--save_analysis_ready_fastqs` | Guarda los FASTQ finales listos para análisis posteriores. |
+
+:::{.callout-important}
+Las lecturas `unmapped` son las lecturas que no alinearon contra el genoma humano.  
+Estas son las lecturas que se usarían después para clasificación taxonómica, ensamblaje metagenómico o análisis funcional.
+:::
+
+---
+
+## 9. ¿Qué NO estamos haciendo en este taller?
+
+Aunque usamos `taxprofiler`, en esta práctica **no vamos a realizar clasificación taxonómica**.
+
+Por lo tanto, no usamos:
+
+```{bash, eval=FALSE}
+--run_kraken2
+--run_bracken
+--run_krona
+--run_profile_standardisation
+```
+
+El objetivo de este taller es llegar solo hasta:
+
+```text
+Lecturas crudas
+      ↓
+Limpieza con fastp
+      ↓
+Remoción de huésped con Bowtie2
+      ↓
+Lecturas limpias listas para análisis posterior
+```
+
+---
+
+## 10. Resumen visual del job
+
+```text
+samplesheet.csv
+      ↓
+nf-core/taxprofiler
+      ↓
+fastp
+      ↓
+Lecturas limpias
+      ↓
+Bowtie2 contra GRCh38
+      ↓
+Lecturas humanas removidas
+      ↓
+FASTQ finales listos para análisis posterior
+```
+
+Al finalizar, los resultados se guardarán en la carpeta:
+
+```{bash, eval=FALSE}
+output/
+```
 # Resultados esperados en la carpeta `output`
 
 Al finalizar la ejecución de `nf-core/taxprofiler`, se generará una carpeta llamada `output`, donde se almacenarán los resultados del procesamiento de las lecturas cortas.
