@@ -518,6 +518,8 @@ nextflow run nf-core/taxprofiler \
   --input /hpcfs/home/cursos/metagenomica_moderna/estudiantes/NOMBRE_ESTUDIANTE/taller_shortReads/metadata/samplesheet.csv \
   --databases /hpcfs/home/cursos/metagenomica_moderna/estudiantes/NOMBRE_ESTUDIANTE/taller_shortReads/metadata/db.csv \
   --outdir /hpcfs/home/cursos/metagenomica_moderna/estudiantes/NOMBRE_ESTUDIANTE/taller_shortReads/output \
+  --preprocessing_qc_tool falco \
+  --perform_shortread_qc \
   --shortread_qc_tool fastp \
   --save_preprocessed_reads \
   --perform_shortread_hostremoval \
