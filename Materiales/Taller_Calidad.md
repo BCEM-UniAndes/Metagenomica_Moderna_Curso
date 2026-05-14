@@ -153,7 +153,7 @@ mkdir -p data/short_reads_raw
 mkdir -p metadata
 ```
 
-# Lecturas cortas
+# LECTURAS CORTAS
 
 Para lecturas cortas se utilizarán archivos FASTQ pareados ubicados en el cluster Hypatia en la siguiente ruta:
 
@@ -950,3 +950,484 @@ FASTQ finales listos para análisis posteriores
 > **Importante:** Las lecturas más relevantes para análisis metagenómicos posteriores son las que no alinearon contra el genoma humano, es decir, las lecturas `unmapped` generadas durante la remoción de huésped.
 
 > **Advertencia:** En este taller no se espera obtener resultados de clasificación taxonómica. Si aparecen carpetas de Kraken2, Bracken, Krona o Taxpasta, significa que accidentalmente se activó alguna herramienta de clasificación.
+
+# LECTURAS LARGAS
+
+En esta parte del taller trabajaremos con lecturas largas de Oxford Nanopore.  
+El objetivo es ejecutar `nf-core/taxprofiler` únicamente para realizar control de calidad y preprocesamiento de lecturas largas.
+
+A diferencia del flujo de lecturas cortas, en este caso:
+
+- Las lecturas son **single-end**.
+- No hay archivos forward y reverse.
+- No usaremos Bowtie2.
+- No haremos remoción de huésped.
+- No haremos clasificación taxonómica.
+- Usaremos herramientas para lecturas largas, como `porechop_abi` y `nanoq`.
+
+---
+
+## 1. Crear la carpeta del taller
+
+Cada estudiante debe trabajar dentro de su carpeta personal.
+
+Primero, entre a su carpeta:
+
+```bash
+cd /hpcfs/home/cursos/metagenomica_moderna/estudiantes/NOMBRE_ESTUDIANTE
+```
+
+Reemplace `NOMBRE_ESTUDIANTE` por el nombre de su carpeta.
+
+Por ejemplo:
+
+```bash
+cd /hpcfs/home/cursos/metagenomica_moderna/estudiantes/j_meza
+```
+
+Ahora cree la carpeta principal del taller de lecturas largas:
+
+```bash
+mkdir -p taller_longreads
+cd taller_longreads
+```
+
+Cree la estructura básica de carpetas:
+
+```bash
+mkdir -p data/long_reads_raw
+mkdir -p metadata
+mkdir -p output
+mkdir -p logs
+```
+
+La estructura esperada será:
+
+```text
+taller_longreads/
+├── data/
+│   └── long_reads_raw/
+├── metadata/
+├── output/
+└── logs/
+```
+
+---
+
+## 2. Copiar las lecturas largas
+
+Las lecturas largas se encuentran en la carpeta compartida del curso:
+
+```bash
+/hpcfs/home/cursos/metagenomica_moderna/Prueba/Datos_Long
+```
+
+En este taller usaremos dos archivos FASTQ de Oxford Nanopore:
+
+```text
+ERR3152364.fastq.gz
+ERR3152366.fastq.gz
+```
+
+Copie las lecturas a su carpeta `data/long_reads_raw`:
+
+```bash
+cp /hpcfs/home/cursos/metagenomica_moderna/Prueba/Datos_Long/ERR3152364.fastq.gz data/long_reads_raw/
+
+cp /hpcfs/home/cursos/metagenomica_moderna/Prueba/Datos_Long/ERR3152366.fastq.gz data/long_reads_raw/
+```
+
+Verifique que los archivos quedaron copiados:
+
+```bash
+ls -lh data/long_reads_raw/
+```
+
+La salida esperada debe mostrar:
+
+```text
+ERR3152364.fastq.gz
+ERR3152366.fastq.gz
+```
+
+También puede verificar que los archivos comprimidos no estén dañados:
+
+```bash
+gzip -t data/long_reads_raw/ERR3152364.fastq.gz
+gzip -t data/long_reads_raw/ERR3152366.fastq.gz
+```
+
+Si no aparece ningún mensaje de error, los archivos están bien.
+
+---
+
+## 3. Crear el `samplesheet` para lecturas largas
+
+En `nf-core/taxprofiler`, el archivo `samplesheet` mantiene la misma estructura general:
+
+```text
+sample,run_accession,instrument_platform,fastq_1,fastq_2,fasta
+```
+
+Sin embargo, para lecturas largas Nanopore hay una diferencia importante:
+
+- Se llena solo la columna `fastq_1`.
+- La columna `fastq_2` queda vacía.
+- La columna `fasta` queda vacía.
+- La plataforma se escribe como `OXFORD_NANOPORE`.
+
+Cree el archivo `samplesheet_longreads.csv`:
+
+```bash
+cat > metadata/samplesheet_longreads.csv << 'EOF'
+sample,run_accession,instrument_platform,fastq_1,fastq_2,fasta
+ERR3152364,ERR3152364_run0,OXFORD_NANOPORE,data/long_reads_raw/ERR3152364.fastq.gz,,
+ERR3152366,ERR3152366_run0,OXFORD_NANOPORE,data/long_reads_raw/ERR3152366.fastq.gz,,
+EOF
+```
+
+Revise el archivo:
+
+```bash
+cat metadata/samplesheet_longreads.csv
+```
+
+Debe verse así:
+
+```text
+sample,run_accession,instrument_platform,fastq_1,fastq_2,fasta
+ERR3152364,ERR3152364_run0,OXFORD_NANOPORE,data/long_reads_raw/ERR3152364.fastq.gz,,
+ERR3152366,ERR3152366_run0,OXFORD_NANOPORE,data/long_reads_raw/ERR3152366.fastq.gz,,
+```
+
+---
+
+## 4. Crear un archivo `db.csv` mínimo
+
+Aunque en este taller no haremos clasificación taxonómica, `nf-core/taxprofiler` solicita un archivo de bases de datos mediante el parámetro `--databases`.
+
+Para cumplir con la validación del pipeline, crearemos un archivo mínimo.  
+Este archivo **no se usará para clasificar**, porque no activaremos Kraken2, Bracken, Krona ni ninguna otra herramienta taxonómica.
+
+Cree el archivo:
+
+```bash
+cat > metadata/db_longreads.csv << 'EOF'
+tool,db_name,db_params,db_type,db_path
+kraken2,dummy_db,,long,data/long_reads_raw
+EOF
+```
+
+Revise su contenido:
+
+```bash
+cat metadata/db_longreads.csv
+```
+
+Debe verse así:
+
+```text
+tool,db_name,db_params,db_type,db_path
+kraken2,dummy_db,,long,data/long_reads_raw
+```
+
+> **Nota:** aunque el archivo menciona `kraken2`, Kraken2 no se ejecutará porque no usaremos el parámetro `--run_kraken2`.
+
+---
+
+## 5. Crear el archivo `nextflow_longreads.config`
+
+Ahora cree el archivo de configuración de recursos para Nextflow:
+
+```bash
+nano nextflow_longreads.config
+```
+
+Pegue el siguiente contenido:
+
+```groovy
+process {
+    executor = 'slurm'
+    queue = 'medium'
+
+    cpus = 2
+    memory = '8.GB'
+    time = '4.h'
+
+    withName: 'PORECHOP_ABI' {
+        cpus = 4
+        memory = '8.GB'
+        time = '12.h'
+    }
+
+    withName: 'NANOQ' {
+        cpus = 4
+        memory = '8.GB'
+        time = '12.h'
+    }
+
+    withName: 'MULTIQC' {
+        cpus = 2
+        memory = '8.GB'
+        time = '4.h'
+    }
+}
+
+executor {
+    queueSize = 4
+}
+
+singularity {
+    enabled = true
+    autoMounts = true
+    pullTimeout = '12h'
+}
+```
+
+Guarde el archivo con:
+
+```text
+Ctrl + O
+Enter
+Ctrl + X
+```
+
+---
+
+## 6. Crear el job de ejecución
+
+Cree el archivo del job:
+
+```bash
+nano taxprofiler_longreads_job.sh
+```
+
+Pegue el siguiente contenido:
+
+```bash
+#!/bin/bash
+
+#SBATCH --job-name=taxprofiler_longreads
+#SBATCH -p medium
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=40G
+#SBATCH --time=2-00:00:00
+#SBATCH --mail-user=jf.meza@uniandes.edu.co
+#SBATCH --mail-type=ALL
+#SBATCH -o logs/taxprofiler_longreads.o%j
+#SBATCH -e logs/taxprofiler_longreads.e%j
+
+# ================================
+# nf-core/taxprofiler
+# Taller de lecturas largas Nanopore
+# Solo QC y preprocesamiento
+# Sin remoción de huésped
+# Sin clasificación taxonómica
+# ================================
+
+module load jdk/19.0.2
+module load singularity/3.7.1
+module load nextflow/25.04.8
+
+hash -r
+
+nextflow -version
+java -version
+
+nextflow run nf-core/taxprofiler \
+  -r 1.2.6 \
+  -resume \
+  -profile singularity \
+  -c nextflow_longreads.config \
+  --input metadata/samplesheet_longreads.csv \
+  --databases metadata/db_longreads.csv \
+  --outdir output \
+  --perform_longread_qc \
+  --longread_adapterremoval_tool porechop_abi \
+  --longread_filter_tool nanoq \
+  --save_preprocessed_reads \
+  --save_analysis_ready_fastqs
+```
+
+Guarde el archivo:
+
+```text
+Ctrl + O
+Enter
+Ctrl + X
+```
+
+---
+
+## 7. Ejecutar el job
+
+Envíe el job a Slurm:
+
+```bash
+sbatch taxprofiler_longreads_job.sh
+```
+
+Revise si el job está en cola o corriendo:
+
+```bash
+squeue -u $USER
+```
+
+Revise los archivos de salida y error:
+
+```bash
+ls -lh logs/
+```
+
+Para ver la salida del job:
+
+```bash
+cat logs/taxprofiler_longreads.o*
+```
+
+Para revisar errores:
+
+```bash
+cat logs/taxprofiler_longreads.e*
+```
+
+---
+
+## 8. ¿Qué cambia respecto al flujo de lecturas cortas?
+
+| Aspecto | Lecturas cortas | Lecturas largas |
+|---|---|---|
+| Plataforma | Illumina / DNBSEQ | Oxford Nanopore |
+| Tipo de lectura | Paired-end | Single-end |
+| Archivos por muestra | Dos: R1 y R2 | Uno: FASTQ único |
+| `instrument_platform` | `ILLUMINA` | `OXFORD_NANOPORE` |
+| `fastq_1` | Forward / R1 | FASTQ Nanopore |
+| `fastq_2` | Reverse / R2 | Vacío |
+| QC principal | `fastp` | `porechop_abi` + `nanoq` |
+| Remoción de host | Bowtie2 | No se realiza en este taller |
+| Clasificación taxonómica | No se realiza | No se realiza |
+
+---
+
+## 9. Resultados esperados
+
+Cuando el pipeline termine correctamente, revise la carpeta `output`:
+
+```bash
+ls -lh output/
+```
+
+También puede explorar las carpetas internas:
+
+```bash
+find output -maxdepth 2 -type d
+```
+
+En este taller se esperan resultados relacionados con:
+
+```text
+porechop_abi/
+nanoq/
+multiqc/
+pipeline_info/
+```
+
+---
+
+## 10. Reportes de calidad
+
+El pipeline generará reportes de calidad y preprocesamiento de las lecturas largas.
+
+Busque archivos HTML con:
+
+```bash
+find output -type f -name "*.html"
+```
+
+También puede buscar archivos de resumen con:
+
+```bash
+find output -type f -name "*.txt"
+find output -type f -name "*.log"
+find output -type f -name "*.json"
+```
+
+El reporte general de MultiQC puede buscarse con:
+
+```bash
+find output -type f -name "multiqc_report.html"
+```
+
+Este archivo resume la ejecución del pipeline y los resultados principales de las herramientas usadas.
+
+---
+
+## 11. FASTQ procesados
+
+Como usamos:
+
+```bash
+--save_preprocessed_reads
+--save_analysis_ready_fastqs
+```
+
+el pipeline guardará archivos FASTQ procesados.
+
+Puede buscarlos con:
+
+```bash
+find output -type f -name "*.fastq.gz"
+```
+
+Estos archivos representan lecturas largas después del preprocesamiento.
+
+---
+
+## 12. Interpretación general de las salidas
+
+Al finalizar el taller, cada estudiante debe identificar:
+
+1. Los reportes de calidad de las lecturas largas.
+2. Las lecturas procesadas después de `porechop_abi` y `nanoq`.
+3. El reporte integrado `multiqc_report.html`.
+4. Los FASTQ finales listos para análisis posteriores.
+
+El flujo ejecutado puede resumirse así:
+
+```text
+Lecturas largas crudas Nanopore
+        ↓
+Validación del samplesheet
+        ↓
+Remoción de adaptadores con porechop_abi
+        ↓
+Filtrado de lecturas largas con nanoq
+        ↓
+Reporte integrado con MultiQC
+        ↓
+FASTQ finales listos para análisis posterior
+```
+
+---
+
+## 13. Qué no hicimos en esta práctica
+
+En este taller no realizamos remoción de huésped porque las muestras usadas corresponden a metagenomas mock de Nanopore y no vamos a asumir que contienen ADN humano.
+
+Tampoco realizamos clasificación taxonómica.
+
+Por eso, en el job no usamos:
+
+```bash
+--perform_longread_hostremoval
+--hostremoval_reference
+--longread_hostremoval_index
+--run_kraken2
+--run_bracken
+--run_krona
+--run_profile_standardisation
+```
+
+El objetivo de esta práctica es enfocarse únicamente en la evaluación y preprocesamiento de lecturas largas.
