@@ -1411,23 +1411,3 @@ FASTQ finales listos para análisis posterior
 ```
 
 ---
-
-## 13. Qué no hicimos en esta práctica
-
-En este taller no realizamos remoción de huésped porque las muestras usadas corresponden a metagenomas mock de Nanopore y no vamos a asumir que contienen ADN humano.
-
-Tampoco realizamos clasificación taxonómica.
-
-Por eso, en el job no usamos:
-
-```bash
---perform_longread_hostremoval
---hostremoval_reference
---longread_hostremoval_index
---run_kraken2
---run_bracken
---run_krona
---run_profile_standardisation
-```
-
-El objetivo de esta práctica es enfocarse únicamente en la evaluación y preprocesamiento de lecturas largas.
