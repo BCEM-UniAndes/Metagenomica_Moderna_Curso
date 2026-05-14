@@ -919,7 +919,7 @@ output/
     └── información técnica de la ejecución del pipeline
 ```
 
-## Interpretación general
+## Descripción del Output
 
 En esta práctica, los archivos más importantes para revisar son:
 
@@ -927,22 +927,6 @@ En esta práctica, los archivos más importantes para revisar son:
 2. Los FASTQ procesados, porque corresponden a las lecturas limpias después del control de calidad.
 3. Las lecturas `unmapped`, porque representan las secuencias que no alinearon contra el genoma humano.
 4. El reporte `multiqc_report.html`, porque resume los resultados de todas las muestras en un solo archivo.
-
-El flujo final puede resumirse así:
-
-```text
-Lecturas crudas
-      ↓
-Control de calidad y trimming con fastp
-      ↓
-Lecturas limpias
-      ↓
-Alineación contra genoma humano con Bowtie2
-      ↓
-Lecturas no humanas o unmapped
-      ↓
-FASTQ finales listos para análisis posteriores
-```
 
 > **Nota:** Los reportes HTML de `fastp` permiten comparar la calidad de las lecturas antes y después del procesamiento. Estos reportes son una de las salidas principales para interpretar si el trimming y filtrado mejoraron la calidad de los datos.
 
