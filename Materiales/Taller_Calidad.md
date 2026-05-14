@@ -1,14 +1,3 @@
----
-title: "Taller: Control de calidad de lecturas metagenómicas con nf-core/taxprofiler"
-author: "Curso Metagenómica Moderna"
-output:
-  html_document:
-    toc: true
-    toc_depth: 3
-    number_sections: true
-    theme: readable
----
-
 # Introducción
 
 En cualquier análisis de metagenómica shotgun, el primer paso antes de interpretar resultados biológicos es evaluar la calidad de las secuencias. Las lecturas crudas que salen del secuenciador no deben asumirse como listas para análisis: pueden contener bases de baja calidad, adaptadores, lecturas demasiado cortas, secuencias artificiales, duplicación técnica, contaminación cruzada o lecturas provenientes del hospedero. Si estos problemas no se detectan y corrigen, pueden afectar la clasificación taxonómica, inflar falsos positivos, reducir la sensibilidad para detectar microorganismos reales o generar comparaciones sesgadas entre muestras.
