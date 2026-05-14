@@ -334,14 +334,11 @@ El índice fue construido previamente usando un script como el siguiente:
 
 #SBATCH --job-name=bowtie2
 #SBATCH -p short
-#SBATCH -N 1
-#SBATCH -n 1
 #SBATCH --cpus-per-task=32
 #SBATCH --mem=80G
 #SBATCH --time=1-00:00:00
-#SBATCH --mail-user=jf.meza@uniandes.edu.co
-#SBATCH --mail-type=ALL
 #SBATCH -o bowtie2.o%j
+#SBATCH -e bowtie2.e%j
 
 module load bowtie2/2.4.5
 
