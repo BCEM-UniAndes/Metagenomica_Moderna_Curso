@@ -28,8 +28,6 @@ El flujo general es:
 
 
 
-## Construcción base de datos personalizada con nf-core/createtaxdb
-
 En esta sección construiremos una base de datos personalizada de protozoarios usando `nf-core/createtaxdb`. Esta base será utilizada posteriormente en `nf-core/taxprofiler` para realizar la clasificación taxonómica de lecturas metagenómicas.
 
 El objetivo de este paso es generar una base compatible con:
