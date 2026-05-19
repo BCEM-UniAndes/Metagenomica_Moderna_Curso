@@ -1,4 +1,4 @@
-## Ejecución de nf-core/taxprofiler
+# nf-core/taxprofiler
 
 En esta segunda parte ejecutaremos `nf-core/taxprofiler` usando lecturas metagenómicas que ya pasaron por pasos previos de control de calidad y remoción de hospedero. Por esta razón, en esta práctica **no realizaremos trimming, filtrado de calidad ni remoción de host dentro de taxprofiler**.
 
@@ -10,6 +10,16 @@ El objetivo de esta sección es clasificar taxonómicamente las lecturas usando:
 - **Taxpasta**, para estandarizar y enriquecer las tablas taxonómicas.
 
 ---
+El flujode trabajo que seguiremos es el siguiente: 
+
+<p align="center">
+  <img src="taxprofiler2.png" width="750">
+</p>
+
+<p align="center">
+  <b>Figura 1.</b> Flujo general de construcción de bases de datos con <code>nf-core/createtaxdb</code>.
+</p>
+
 
 ## 1. Crear la carpeta de trabajo para taxprofiler
 
