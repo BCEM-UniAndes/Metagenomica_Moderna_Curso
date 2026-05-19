@@ -478,8 +478,6 @@ El archivo tiene una estructura similar a esta:
 
 #SBATCH --job-name=nfcore_taxprofiler
 #SBATCH -p medium
-#SBATCH -N 1
-#SBATCH -n 1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=80G
 #SBATCH --time=4-00:00:00
