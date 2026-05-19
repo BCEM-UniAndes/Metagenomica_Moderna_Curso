@@ -37,20 +37,17 @@ De forma general, `createtaxdb` requiere tres componentes principales:
 
 En este taller construiremos una base de datos personalizada para clasificación taxonómica de protozoarios. Esta base será usada posteriormente por `nf-core/taxprofiler` para clasificar las lecturas metagenómicas con Kraken2 y estimar abundancias con Bracken.
 
-El flujo general será:
+EL flujo general es: 
 
-```text
-Genomas de referencia (.fna)
-        ↓
-samplesheet.csv con ID, taxid y ruta al FASTA
-        ↓
-nf-core/createtaxdb
-        ↓
-Base de datos Kraken2/Bracken
-        ↓
-nf-core/taxprofiler
-        ↓
-Clasificación taxonómica de las muestras
+<p align="center">
+  <img src="Taller5.png" width="750">
+</p>
+
+<p align="center">
+  <b>Figura 1.</b> Flujo general de construcción de bases de datos con <code>nf-core/createtaxdb</code>.
+</p>
+
+
 
 ## Construcción de una base de datos personalizada con nf-core/createtaxdb
 
