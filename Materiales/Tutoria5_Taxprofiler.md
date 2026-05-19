@@ -49,7 +49,7 @@ EL flujo general es:
 
 
 
-## Construcción de una base de datos personalizada con nf-core/createtaxdb
+## Construcción base de datos personalizada con nf-core/createtaxdb
 
 En esta sección construiremos una base de datos personalizada de protozoarios usando `nf-core/createtaxdb`. Esta base será utilizada posteriormente en `nf-core/taxprofiler` para realizar la clasificación taxonómica de lecturas metagenómicas.
 
@@ -502,26 +502,6 @@ Las carpetas más importantes son:
 | `pipeline_info/` | Información de ejecución, parámetros y trazabilidad del workflow. |
 
 ---
-
-## 16. Resumen del flujo
-
-```text
-Crear carpetas de trabajo
-        ↓
-Copiar genomas de referencia
-        ↓
-Copiar y modificar samplesheet.csv
-        ↓
-Copiar y modificar db.sh
-        ↓
-Ejecutar nf-core/createtaxdb con sbatch
-        ↓
-Obtener base de datos Kraken2/Bracken
-        ↓
-Usar la base en nf-core/taxprofiler
-```
-
-Al finalizar este paso, cada estudiante tendrá una base de datos personalizada de protozoarios lista para ser utilizada en el análisis taxonómico con `nf-core/taxprofiler`.
 
 
 
