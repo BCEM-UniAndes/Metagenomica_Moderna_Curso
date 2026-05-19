@@ -53,7 +53,7 @@ pwd
 
 ---
 
-## 2. Crear la estructura de carpetas del taller
+## 2. Crear la estructura de carpetas
 
 Dentro de su carpeta personal, cree una carpeta llamada `Taller5`:
 
