@@ -234,9 +234,9 @@ El archivo tiene una estructura similar a esta:
 
 ```csv
 tool,db_name,db_params,db_type,db_path
-kraken2,GTDBtk_k2,,short,/hpcfs/home/ing_quimica/jf.meza/databases/k2_gtdb_genome_reps_20250609.tar.gz
-bracken,GTDBtk_br_family,;-r 150 -l F,short,/hpcfs/home/ing_quimica/jf.meza/databases/k2_gtdb_genome_reps_20250609.tar.gz
-bracken,GTDBtk_br_genus,;-r 150 -l G,short,/hpcfs/home/ing_quimica/jf.meza/databases/k2_gtdb_genome_reps_20250609.tar.gz
+kraken2,Standard_08_k2,,short,/hpcfs/home/ing_quimica/jf.meza/databases/k2_standard_08_GB_20260226.tar.gz
+bracken,Standard_08_br_family,;-r 150 -l F,short,/hpcfs/home/ing_quimica/jf.meza/databases/k2_standard_08_GB_20260226.tar.gz
+bracken,Standard_08_br_genus,;-r 150 -l G,short,/hpcfs/home/ing_quimica/jf.meza/databases/k2_standard_08_GB_20260226.tar.gz
 kraken2,protozoa_genome_k2,,short,/hpcfs/home/cursos/metagenomica_moderna/Talleres/Taller5/Create_DB/output_1/kraken2/kraken2_Protozoa-kraken2
 bracken,protozoa_genome_br_family,;-r 150 -l F,short,/hpcfs/home/cursos/metagenomica_moderna/Talleres/Taller5/Create_DB/output_1/bracken/kraken2_Protozoa-bracken
 bracken,protozoa_genome_br_genus,;-r 150 -l G,short,/hpcfs/home/cursos/metagenomica_moderna/Talleres/Taller5/Create_DB/output_1/bracken/kraken2_Protozoa-bracken
@@ -282,7 +282,7 @@ El punto y coma `;` se usa para separar los parámetros que se pasan directament
 
 ### Punto importante
 
-En este taller no es obligatorio cambiar las rutas del `db.csv`, porque las bases están disponibles en rutas compartidas.
+En este tutorial no es obligatorio cambiar las rutas del `db.csv`, porque las bases están disponibles en rutas compartidas.
 
 Sin embargo, si usted construyó su propia base de datos en la sección anterior con `nf-core/createtaxdb`, puede reemplazar las rutas de la base de protozoarios para usar su propia base.
 
@@ -823,25 +823,5 @@ multiqc_report.html
 Este archivo resume la ejecución del pipeline y permite revisar rápidamente si los procesos terminaron correctamente.
 
 ---
-
-## 21. Resumen del flujo
-
-```text
-Crear carpeta Taxprofiler
-        ↓
-Copiar secuencias paired-end ya procesadas
-        ↓
-Configurar samplesheet.csv
-        ↓
-Configurar db.csv
-        ↓
-Configurar nextflow.config
-        ↓
-Configurar tax.sh
-        ↓
-Ejecutar nf-core/taxprofiler con sbatch
-        ↓
-Revisar resultados en output_2
-```
 
 Al finalizar este paso, cada estudiante tendrá los resultados taxonómicos de sus dos muestras, incluyendo clasificación con Kraken2, abundancias estimadas con Bracken, visualizaciones con Krona y tablas estandarizadas con Taxpasta.
