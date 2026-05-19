@@ -16,7 +16,7 @@ De forma general, `createtaxdb` requiere tres componentes principales:
 
 En este taller construiremos una base de datos personalizada para clasificación taxonómica de protozoarios. Esta base será usada posteriormente por `nf-core/taxprofiler` para clasificar las lecturas metagenómicas con Kraken2 y estimar abundancias con Bracken.
 
-EL flujo general es: 
+El flujo general es: 
 
 <p align="center">
   <img src="Taller5.png" width="750">
