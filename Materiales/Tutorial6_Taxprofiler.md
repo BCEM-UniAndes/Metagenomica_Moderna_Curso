@@ -17,7 +17,7 @@ El flujode trabajo que seguiremos es el siguiente:
 </p>
 
 <p align="center">
-  <b>Figura 1.</b> Flujo general de construcción de bases de datos con <code>nf-core/createtaxdb</code>.
+  <b>Figura 1.</b> Flujo general de clasificación taxonómica <code>nf-core/taxprofiler</code>.
 </p>
 
 
