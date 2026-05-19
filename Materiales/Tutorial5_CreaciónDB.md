@@ -1,4 +1,4 @@
-## Construcción de base de datos con nf-core/createtaxdb
+# Construcción de base de datos con nf-core/createtaxdb
 
 Antes de ejecutar `nf-core/taxprofiler`, es necesario definir contra qué bases de datos se van a comparar las lecturas metagenómicas. Aunque existen bases de datos generales ya construidas, en este taller vamos a crear una base de datos personalizada enfocada en organismos de interés para el análisis taxonómico.
 
