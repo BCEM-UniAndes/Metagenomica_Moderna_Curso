@@ -1,24 +1,3 @@
-# Introducción a nf-core/taxprofiler
-
-`nf-core/taxprofiler` es un flujo de trabajo bioinformático desarrollado bajo el ecosistema **nf-core** y ejecutado con **Nextflow**. Su objetivo principal es realizar la **clasificación taxonómica de muestras metagenómicas**, usando diferentes herramientas especializadas como Kraken2, Bracken, Kaiju, Centrifuge, MetaPhlAn, entre otras.
-
-En este taller utilizaremos `taxprofiler` para analizar lecturas metagenómicas previamente procesadas. Es decir, las secuencias ya pasaron por pasos previos como control de calidad y remoción de hospedero. Por esta razón, en esta práctica no realizaremos trimming, filtrado ni eliminación de contaminantes humanos dentro del pipeline.
-
-De forma general, el flujo de trabajo recibe tres elementos principales:
-
-1. Un archivo `samplesheet.csv`, donde se indican las muestras y las rutas a los archivos FASTQ.
-2. Un archivo `db.csv`, donde se especifican las bases de datos taxonómicas que se van a utilizar.
-3. Un archivo de configuración `nextflow.config`, donde se ajustan recursos computacionales y parámetros del entorno de ejecución.
-
-En esta práctica correremos principalmente:
-
-- **Kraken2**, para asignar taxonomía a las lecturas mediante comparación contra bases de datos de referencia.
-- **Bracken**, para reestimar abundancias taxonómicas a partir de los resultados de Kraken2.
-- **Krona**, para generar visualizaciones interactivas de la composición taxonómica.
-- **Taxpasta**, para estandarizar y enriquecer las tablas taxonómicas con nombres, rangos y linajes.
-
-El resultado final será una carpeta de salida con reportes taxonómicos, tablas de abundancia, archivos interactivos de visualización y reportes generales del flujo de trabajo. Estos archivos permitirán explorar qué organismos están presentes en cada muestra y comparar los perfiles taxonómicos entre muestras.
-
 ## Construcción de base de datos con nf-core/createtaxdb
 
 Antes de ejecutar `nf-core/taxprofiler`, es necesario definir contra qué bases de datos se van a comparar las lecturas metagenómicas. Aunque existen bases de datos generales ya construidas, en este taller vamos a crear una base de datos personalizada enfocada en organismos de interés para el análisis taxonómico.
