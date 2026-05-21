@@ -136,7 +136,7 @@ Cada estudiante trabajará con dos muestras paired-end.
 | Floréz Gamba, Diana Carolina | SRR17048895 | SRR17048957 |
 | García Catiblanco, Sebastián | SRR17048990 | SRR17049013 |
 | Huerfano Santos, Lina Paola | SRR17048922 | SRR17048973 |
-| León Jiménez, Ingri Vanesa | SRR17048892 | SRR17048904 |
+| Rodriguez Rodriguez, Laura Daniela | SRR17048892 | SRR17048904 |
 | Lopez Ramirez, Gina Pilar | SRR17048899 | SRR17048898 |
 | Pedraza Herrera, Luz Adriana | SRR17048969 | SRR17048982 |
 | Perez Mejia, Julian Andres | SRR17048929 | SRR17048958 |
