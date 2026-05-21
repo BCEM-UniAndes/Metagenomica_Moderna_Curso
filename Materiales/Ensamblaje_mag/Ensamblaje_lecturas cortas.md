@@ -4,44 +4,7 @@
 
 `nf-core/mag` es un pipeline bioinformático desarrollado dentro de la comunidad **nf-core** para el análisis reproducible de metagenomas. El pipeline está diseñado para realizar ensamblaje, binning y anotación de metagenomas a partir de lecturas cortas, lecturas largas o datos híbridos. En términos generales, permite pasar desde archivos FASTQ hasta ensamblajes, bins metagenómicos, evaluación de calidad, clasificación taxonómica, anotación y reportes integrados. :contentReference[oaicite:0]{index=0}
 
-El flujo completo de `nf-core/mag` puede incluir varias etapas:
-
-```text
-Control de calidad de lecturas
-        ↓
-Remoción de contaminantes
-        ↓
-Ensamblaje de contigs
-        ↓
-Evaluación del ensamblaje
-        ↓
-Binning metagenómico
-        ↓
-Evaluación de calidad de bins
-        ↓
-Clasificación taxonómica y anotación
-        ↓
-Reporte final
-```
-
-La página oficial del pipeline resume que `nf-core/mag` soporta lecturas cortas y largas, puede realizar trimming y control de calidad, ensamblaje con herramientas como **MEGAHIT** y **SPAdes**, evaluación con **QUAST** y **ALE**, binning con herramientas como **MetaBAT2**, **MaxBin2**, **CONCOCT**, **COMEBin**, **MetaBinner** o **SemiBin2**, y evaluación de bins con **BUSCO**, **CheckM** o **CheckM2**. Además, genera un reporte final integrado con **MultiQC**. :contentReference[oaicite:1]{index=1}
-
-En este tutorial **no ejecutaremos todo el flujo completo**. Para reducir tiempo de cómputo y enfocarnos en el concepto de ensamblaje, usaremos únicamente la parte de:
-
-```text
-Lecturas cortas limpias
-        ↓
-Ensamblaje con MEGAHIT
-        ↓
-Evaluación del ensamblaje con QUAST/metaQUAST
-   
-```
-
-Por esta razón, en el job se desactivan las etapas de binning, evaluación de bins, clasificación taxonómica y anotación.
-
-### Flujo general de nf-core/mag
-
-La siguiente imagen corresponde al diagrama oficial del flujo de trabajo de `nf-core/mag` versión 5.4.2:
+El flujo completo de `nf-core/mag` versión 5.4.2:
 
 ![Flujo de trabajo de nf-core/mag](https://raw.githubusercontent.com/nf-core/mag/5.4.2//docs/images/mag_metromap_light.png)
 
