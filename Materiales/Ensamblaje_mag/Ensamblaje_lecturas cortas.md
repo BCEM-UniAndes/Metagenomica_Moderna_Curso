@@ -685,31 +685,7 @@ Los archivos más importantes son:
 
 ---
 
-## 16. Revisar los contigs ensamblados
-
-Para ver el tamaño de los archivos ensamblados:
-
-```bash
-ls -lh *.contigs.fa.gz
-```
-
-Para contar cuántos contigs tiene un ensamblaje:
-
-```bash
-zgrep -c ">" MEGAHIT-SRR17048924.contigs.fa.gz
-```
-
-Debe reemplazar `SRR17048924` por el código de su muestra.
-
-Para observar los primeros registros del archivo FASTA:
-
-```bash
-zcat MEGAHIT-SRR17048924.contigs.fa.gz | head
-```
-
----
-
-## 17. Revisar la calidad del ensamblaje
+## 16. Revisar la calidad del ensamblaje
 
 Dentro de la carpeta `MEGAHIT`, ingrese a la carpeta `QC`:
 
@@ -771,31 +747,7 @@ less -S report.txt
 
 ---
 
-## 18. Revisar el reporte MultiQC
-
-Regrese a la carpeta principal de salida:
-
-```bash
-cd ../../../../multiqc
-```
-
-Liste el contenido:
-
-```bash
-ls
-```
-
-Busque el archivo HTML:
-
-```bash
-ls *.html
-```
-
-El archivo HTML puede descargarse o visualizarse posteriormente en un navegador.
-
----
-
-## 19. Interpretación básica de resultados
+## 17. Interpretación básica de resultados
 
 Al finalizar el análisis, cada estudiante debe identificar:
 
@@ -814,86 +766,3 @@ Un ensamblaje con mayor N50, mayor longitud total ensamblada y menor número de 
 Sin embargo, en metagenómica, un mayor número de contigs no siempre significa que el ensamblaje sea malo, ya que la muestra puede contener múltiples organismos con diferentes abundancias y coberturas.
 
 ---
-
-## 20. Resumen del tutorial
-
-En este tutorial se realizó:
-
-```text
-1. Creación de carpetas de trabajo.
-2. Copia de lecturas cortas paired-end.
-3. Creación del archivo samplesheet.csv.
-4. Configuración de recursos con mag.config.
-5. Ejecución de nf-core/mag.
-6. Ensamblaje con MEGAHIT.
-7. Evaluación del ensamblaje con QUAST/metaQUAST.
-8. Revisión del reporte MultiQC.
-```
-
-El pipeline fue configurado para ejecutar únicamente la parte de ensamblaje con MEGAHIT y evitar etapas posteriores como binning, refinamiento, clasificación taxonómica y anotación.
-
----
-
-## 21. Comandos útiles
-
-Ver trabajos activos:
-
-```bash
-squeue -u metagenomica_moderna
-```
-
-Cancelar un job:
-
-```bash
-scancel JOBID
-```
-
-Ver archivos grandes en una carpeta:
-
-```bash
-ls -lh
-```
-
-Contar archivos FASTQ:
-
-```bash
-ls *.fastq.gz | wc -l
-```
-
-Contar contigs en un FASTA comprimido:
-
-```bash
-zgrep -c ">" archivo.contigs.fa.gz
-```
-
-Ver las primeras líneas de un FASTA comprimido:
-
-```bash
-zcat archivo.contigs.fa.gz | head
-```
-
-Buscar archivos llamados `report.txt`:
-
-```bash
-find . -name "report.txt"
-```
-
-Revisar logs de Nextflow:
-
-```bash
-less -S .nextflow.log
-```
-
----
-
-## 22. Nota final
-
-Este tutorial usa lecturas cortas previamente procesadas y removidas de hospedero. Por esta razón, el pipeline se ejecuta con `--skip_shortread_qc`.
-
-La salida principal del tutorial son los archivos de contigs ensamblados por MEGAHIT:
-
-```text
-MEGAHIT-<muestra>.contigs.fa.gz
-```
-
-y los reportes de calidad del ensamblaje generados por QUAST/metaQUAST.
