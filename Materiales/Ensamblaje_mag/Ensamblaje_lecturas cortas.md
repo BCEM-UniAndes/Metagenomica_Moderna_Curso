@@ -759,9 +759,9 @@ Al finalizar el análisis, cada estudiante debe identificar:
 
 Una forma sencilla de interpretar los resultados es:
 
-```text
+
 Un ensamblaje con mayor N50, mayor longitud total ensamblada y menor número de contigs puede indicar una mejor continuidad del ensamblaje.
-```
+
 
 Sin embargo, en metagenómica, un mayor número de contigs no siempre significa que el ensamblaje sea malo, ya que la muestra puede contener múltiples organismos con diferentes abundancias y coberturas.
 
