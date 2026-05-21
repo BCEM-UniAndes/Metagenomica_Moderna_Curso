@@ -230,7 +230,7 @@ SRR17048974,2,/hpcfs/home/cursos/metagenomica_moderna/estudiantes/Carpeta_person
 
 Debe reemplazar `Carpeta_personal` por el nombre real de su carpeta.
 
-También debe reemplazar los códigos de muestra por los códigos asignados a usted.
+También debe reemplazar los códigos de muestra por los códigos asignados.
 
 ---
 
