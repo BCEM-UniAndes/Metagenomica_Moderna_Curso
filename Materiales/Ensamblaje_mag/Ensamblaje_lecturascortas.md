@@ -747,7 +747,7 @@ less -S report.txt
 
 ---
 
-## 17. Interpretación básica de resultados
+## 17. Interpretación de resultados
 
 Al finalizar el análisis, cada estudiante debe identificar:
 
