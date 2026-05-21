@@ -12,7 +12,7 @@ Fuente: página oficial de `nf-core/mag` versión 5.4.2.
 
 En la imagen se observa que el pipeline completo puede ir desde el preprocesamiento de lecturas cortas y largas hasta ensamblaje, binning, refinamiento, evaluación de calidad, clasificación taxonómica, anotación y reporte final. En nuestro caso, solo seguiremos la ruta inicial de ensamblaje con **MEGAHIT** y evaluación con **QUAST/metaQUAST**.
 
-#Tutorial
+# Tutorial
 
 ## 1. Objetivo del tutorial
 
