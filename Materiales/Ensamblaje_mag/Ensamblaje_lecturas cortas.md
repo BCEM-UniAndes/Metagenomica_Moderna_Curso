@@ -18,25 +18,7 @@ En la imagen se observa que el pipeline completo puede ir desde el preprocesamie
 
 En este tutorial se realizará el **ensamblaje de lecturas cortas paired-end** usando el pipeline **nf-core/mag**.
 
-El objetivo es ejecutar únicamente la etapa de ensamblaje con **MEGAHIT** y evaluar la calidad del ensamblaje con **QUAST/metaQUAST**. En este ejercicio no se realizará binning, refinamiento de bins, clasificación taxonómica de MAGs ni anotación.
-
-El flujo general será:
-
-```text
-Lecturas cortas limpias
-        ↓
-samplesheet.csv
-        ↓
-nf-core/mag
-        ↓
-MEGAHIT
-        ↓
-QUAST / metaQUAST
-        ↓
-MultiQC
-```
-
-En este taller se trabajará con lecturas cortas que ya pasaron por remoción de hospedero. Por esta razón, se saltarán los pasos de control de calidad y preprocesamiento de lecturas cortas dentro del pipeline.
+El objetivo es ejecutar únicamente la etapa de ensamblaje con **MEGAHIT** y evaluar la calidad del ensamblaje con **QUAST/metaQUAST**. En este ejercicio no se realizará binning, refinamiento de bins, clasificación taxonómica de MAGs ni anotación.En este tutorial se trabajará con lecturas cortas que ya pasaron por remoción de hospedero. Por esta razón, se saltarán los pasos de control de calidad y preprocesamiento de lecturas cortas dentro del pipeline.
 
 ---
 
