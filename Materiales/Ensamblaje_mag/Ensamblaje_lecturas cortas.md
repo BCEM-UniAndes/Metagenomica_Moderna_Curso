@@ -1,6 +1,6 @@
 # Tutorial: Ensamblaje de lecturas cortas con nf-core/mag
 
-## 2. ¿Qué es nf-core/mag?
+# nf-core/mag
 
 `nf-core/mag` es un pipeline bioinformático desarrollado dentro de la comunidad **nf-core** para el análisis reproducible de metagenomas. El pipeline está diseñado para realizar ensamblaje, binning y anotación de metagenomas a partir de lecturas cortas, lecturas largas o datos híbridos. En términos generales, permite pasar desde archivos FASTQ hasta ensamblajes, bins metagenómicos, evaluación de calidad, clasificación taxonómica, anotación y reportes integrados. :contentReference[oaicite:0]{index=0}
 
@@ -34,8 +34,7 @@ Lecturas cortas limpias
 Ensamblaje con MEGAHIT
         ↓
 Evaluación del ensamblaje con QUAST/metaQUAST
-        ↓
-Reporte MultiQC
+   
 ```
 
 Por esta razón, en el job se desactivan las etapas de binning, evaluación de bins, clasificación taxonómica y anotación.
