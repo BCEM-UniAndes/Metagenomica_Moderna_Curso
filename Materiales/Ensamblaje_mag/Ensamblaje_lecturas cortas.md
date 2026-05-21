@@ -2,7 +2,7 @@
 
 # nf-core/mag
 
-`nf-core/mag` es un pipeline bioinformático desarrollado dentro de la comunidad **nf-core** para el análisis reproducible de metagenomas. El pipeline está diseñado para realizar ensamblaje, binning y anotación de metagenomas a partir de lecturas cortas, lecturas largas o datos híbridos. En términos generales, permite pasar desde archivos FASTQ hasta ensamblajes, bins metagenómicos, evaluación de calidad, clasificación taxonómica, anotación y reportes integrados. :contentReference[oaicite:0]{index=0}
+`nf-core/mag` es un pipeline bioinformático desarrollado dentro de la comunidad **nf-core** para el análisis reproducible de metagenomas. El pipeline está diseñado para realizar ensamblaje, binning y anotación de metagenomas a partir de lecturas cortas, lecturas largas o datos híbridos. En términos generales, permite pasar desde archivos FASTQ hasta ensamblajes, bins metagenómicos, evaluación de calidad, clasificación taxonómica, anotación y reportes integrados.
 
 El flujo completo de `nf-core/mag` versión 5.4.2:
 
