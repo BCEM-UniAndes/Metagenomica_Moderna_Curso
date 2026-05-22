@@ -168,7 +168,7 @@ Para copiar una muestra, use la siguiente estructura general:
 
 ```bash
 cp /hpcfs/home/cursos/metagenomica_moderna/Talleres/Taller5/Taxprofiler/Secuencias/CodigoID_run0_host_removed.unmapped_1.fastq.gz .
-cp /hpcfs/home/cursos/metagenomica_moderna/Talleres/Taller5/Taxprofiler/Secuencias/CodigoID_run0_host_removed.unmapped_1.fastq.gz .
+cp /hpcfs/home/cursos/metagenomica_moderna/Talleres/Taller5/Taxprofiler/Secuencias/CodigoID_run0_host_removed.unmapped_2.fastq.gz .
 ```
 
 Debe reemplazar `CodigoID` por el código real de su muestra.
@@ -177,7 +177,7 @@ Por ejemplo, si su muestra es `SRR17048892`, debe ejecutar:
 
 ```bash
 cp /hpcfs/home/cursos/metagenomica_moderna/Talleres/Taller5/Taxprofiler/Secuencias/CodigoID_run0_host_removed.unmapped_1.fastq.gz .
-cp /hpcfs/home/cursos/metagenomica_moderna/Talleres/Taller5/Taxprofiler/Secuencias/CodigoID_run0_host_removed.unmapped_1.fastq.gz .
+cp /hpcfs/home/cursos/metagenomica_moderna/Talleres/Taller5/Taxprofiler/Secuencias/CodigoID_run0_host_removed.unmapped_2.fastq.gz .
 ```
 
 Si tiene dos muestras, debe repetir el mismo procedimiento para la segunda muestra.
