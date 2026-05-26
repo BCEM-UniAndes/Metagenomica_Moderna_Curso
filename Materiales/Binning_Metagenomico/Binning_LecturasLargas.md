@@ -454,7 +454,7 @@ nextflow run nf-core/mag -r 5.4.2 \
   --run_checkm2 \
   --checkm2_db /hpcfs/home/cursos/metagenomica_moderna/Talleres/Prueba/Databases/CheckM2_database/uniref100.KO.1.dmnd \
   --refine_bins_dastool \
-  --postbinning_input refined_bins_only
+  --postbinning_input both
 ```
 
 Cada estudiante debe modificar las rutas de:
@@ -702,7 +702,7 @@ Un MAG de buena calidad suele tener alta completitud y baja contaminación.
 
 ---
 
-## 18. Interpretación básica de los MAGs
+## 18. Interpretación MAGs
 
 Después de obtener los resultados de `CheckM2`, se pueden clasificar los MAGs según completitud y contaminación.
 
