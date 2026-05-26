@@ -715,3 +715,24 @@ Este archivo puede contener columnas como:
 Un MAG de buena calidad suele tener alta completitud y baja contaminación.
 
 ---
+## 17. Interpretación básica de los MAGs
+
+Después de obtener los resultados de `CheckM2`, se pueden clasificar los MAGs según completitud y contaminación.
+
+Una clasificación común es:
+
+| Categoría | Criterio aproximado |
+|---|---|
+| Alta calidad | Completitud ≥ 90% y contaminación ≤ 5% |
+| Calidad media | Completitud ≥ 50% y contaminación ≤ 10% |
+| Baja calidad | Completitud < 50% o contaminación alta |
+
+Ejemplo de interpretación:
+
+```text
+Un bin con 92% de completitud y 3% de contaminación puede considerarse un MAG de alta calidad.
+Un bin con 65% de completitud y 7% de contaminación puede considerarse de calidad media.
+Un bin con 35% de completitud no se considera un MAG robusto para análisis genómicos posteriores.
+```
+
+---
