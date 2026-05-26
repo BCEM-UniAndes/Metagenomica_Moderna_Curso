@@ -59,24 +59,6 @@ En este tutorial se utilizarán:
 - `DAS Tool` para refinamiento de bins.
 - `CheckM2` para evaluación de calidad de MAGs.
 
-El flujo general del análisis será:
-
-```text
-Lecturas largas Oxford Nanopore + ensamblajes Flye
-                         ↓
-                    nf-core/mag
-                         ↓
-            Uso de ensamblajes precomputados
-                         ↓
-          Binning con MetaBAT2, MaxBin2 y SemiBin2
-                         ↓
-              Refinamiento con DAS Tool
-                         ↓
-                Evaluación con CheckM2
-                         ↓
-                    MAGs finales
-```
-
 > **Nota importante:** en este tutorial se usarán ensamblajes precomputados mediante `--assembly_input`. Esto permite saltar las etapas de preprocesamiento y ensamblaje, e iniciar el flujo desde la etapa de binning.
 
 ---
@@ -93,7 +75,7 @@ La contraseña será compartida por el instructor durante la sesión.
 
 ---
 
-## 5. Ubicación de trabajo
+## 5. Ubicación espacio de trabajo
 
 Cada estudiante debe trabajar dentro de su carpeta personal.
 
@@ -383,206 +365,6 @@ Abra el archivo:
 ```bash
 nano mag.config
 ```
-
-El archivo `mag.config` debe tener una estructura similar a esta:
-
-```groovy
-/*
- * mag.config
- * Configuración para nf-core/mag 5.4.2
- * Flujo: ensamblajes precomputados de lecturas largas + binning metagenómico
- * Ensamblador: Flye
- * Binners activos: MetaBAT2, MaxBin2 y SemiBin2
- */
-
-workDir = '/hpcfs/home/cursos/metagenomica_moderna/estudiantes/Carpeta_personal/Taller_Binning/longReads/work'
-
-singularity {
-  enabled     = true
-  autoMounts  = true
-  cacheDir    = '/hpcfs/home/cursos/metagenomica_moderna/estudiantes/Carpeta_personal/Taller_Binning/longReads/singularity_cache'
-  pullTimeout = '12h'
-}
-
-executor {
-  queueSize       = 3
-  submitRateLimit = '3/1min'
-}
-
-params {
-  run_busco   = false
-  run_checkm  = false
-  run_checkm2 = true
-
-  skip_spades       = true
-  skip_spadeshybrid = true
-  skip_megahit      = true
-
-  skip_prokka = true
-  skip_metaeuk = true
-  skip_gtdbtk  = true
-
-  skip_concoct    = true
-  skip_comebin    = true
-  skip_metabinner = true
-
-  refine_bins_dastool = true
-  postbinning_input   = 'refined_bins_only'
-
-  checkm2_db = '/hpcfs/home/cursos/metagenomica_moderna/Talleres/Prueba/Databases/CheckM2_database/uniref100.KO.1.dmnd'
-
-  save_assembly_mapped_reads = true
-}
-
-process {
-  executor = 'slurm'
-
-  errorStrategy = 'retry'
-  maxRetries    = 2
-
-  shell = ['/bin/bash', '-euo', 'pipefail']
-
-  cpus   = 2
-  memory = 8.GB
-  time   = 4.h
-  queue  = 'short'
-
-  withLabel: process_single {
-    cpus   = 1
-    memory = 4.GB
-    time   = 4.h
-    queue  = 'short'
-  }
-
-  withLabel: process_low {
-    cpus   = 2
-    memory = 8.GB
-    time   = 8.h
-    queue  = 'short'
-  }
-
-  withLabel: process_medium {
-    cpus   = 8
-    memory = 32.GB
-    time   = 24.h
-    queue  = 'medium'
-  }
-
-  withLabel: process_high {
-    cpus   = 16
-    memory = 120.GB
-    time   = 72.h
-    queue  = 'long'
-  }
-
-  withLabel: process_long {
-    cpus   = 16
-    memory = 120.GB
-    time   = 96.h
-    queue  = 'long'
-  }
-
-  withName: '.*BOWTIE2.*' {
-    cpus     = 12
-    memory   = 64.GB
-    time     = 48.h
-    queue    = 'medium'
-    maxForks = 2
-  }
-
-  withName: '.*MINIMAP2.*' {
-    cpus     = 12
-    memory   = 64.GB
-    time     = 48.h
-    queue    = 'medium'
-    maxForks = 2
-  }
-
-  withName: '.*SAMTOOLS.*' {
-    cpus     = 8
-    memory   = 32.GB
-    time     = 24.h
-    queue    = 'medium'
-    maxForks = 3
-  }
-
-  withName: '.*COVERAGE.*|.*JGI.*|.*DEPTH.*' {
-    cpus     = 8
-    memory   = 32.GB
-    time     = 24.h
-    queue    = 'medium'
-    maxForks = 3
-  }
-
-  withName: '.*METABAT.*' {
-    cpus     = 12
-    memory   = 64.GB
-    time     = 48.h
-    queue    = 'medium'
-    maxForks = 2
-  }
-
-  withName: '.*MAXBIN.*' {
-    cpus     = 12
-    memory   = 80.GB
-    time     = 72.h
-    queue    = 'long'
-    maxForks = 2
-  }
-
-  withName: '.*SEMIBIN.*' {
-    cpus     = 16
-    memory   = 120.GB
-    time     = 96.h
-    queue    = 'long'
-    maxForks = 1
-  }
-
-  withName: '.*DASTOOL.*|.*DAS_TOOL.*' {
-    cpus     = 12
-    memory   = 80.GB
-    time     = 72.h
-    queue    = 'long'
-    maxForks = 2
-  }
-
-  withName: '.*CHECKM2.*' {
-    cpus     = 16
-    memory   = 120.GB
-    time     = 96.h
-    queue    = 'long'
-    maxForks = 1
-  }
-
-  withName: '.*QUAST.*' {
-    cpus     = 8
-    memory   = 32.GB
-    time     = 24.h
-    queue    = 'medium'
-    maxForks = 3
-  }
-
-  withName: '.*MULTIQC.*' {
-    cpus   = 2
-    memory = 8.GB
-    time   = 4.h
-    queue  = 'short'
-  }
-
-  withName: '.*FASTQC.*' {
-    cpus     = 1
-    memory   = 8.GB
-    time     = 4.h
-    queue    = 'short'
-    maxForks = 2
-
-    beforeScript = '''
-      export _JAVA_OPTIONS="-XX:CompressedClassSpaceSize=128m -XX:ReservedCodeCacheSize=64m"
-    '''
-  }
-}
-```
-
 Cada estudiante debe modificar las rutas de `workDir` y `cacheDir`.
 
 Cambie esta línea:
@@ -747,39 +529,7 @@ Debe reemplazar `JOBID` por el número real de su job.
 
 ---
 
-## 15. Revisar el progreso de Nextflow
-
-Durante la ejecución, Nextflow mostrará el progreso de los procesos del pipeline.
-
-También puede revisar el log principal:
-
-```bash
-less .nextflow.log
-```
-
-Para buscar errores dentro del log:
-
-```bash
-grep -i "error" .nextflow.log
-```
-
-Para buscar procesos fallidos:
-
-```bash
-grep -i "failed" .nextflow.log
-```
-
-Si el job se detiene y necesita reanudarlo, el comando del script ya incluye:
-
-```bash
--resume
-```
-
-Esto permite que Nextflow continúe desde los procesos completados previamente.
-
----
-
-## 16. Archivos de salida
+## 15. Archivos de salida
 
 Los resultados se guardarán en la carpeta definida con `--outdir`. En este tutorial será:
 
@@ -811,9 +561,9 @@ output/
 
 ---
 
-## 17. Descripción general de los resultados
+## 16. Descripción general de los resultados
 
-### 17.1 `Assembly/`
+### 16.1 `Assembly/`
 
 Esta carpeta contiene información relacionada con los ensamblajes usados por el pipeline.
 
@@ -827,7 +577,7 @@ Aquí se pueden encontrar archivos relacionados con:
 
 ---
 
-### 17.2 `GenomeBinning/`
+### 16.2 `GenomeBinning/`
 
 Esta carpeta contiene los resultados principales del binning metagenómico.
 
@@ -871,7 +621,7 @@ GenomeBinning/
 
 ---
 
-### 17.3 Refinamiento con `DAS Tool`
+### 16.3 Refinamiento con `DAS Tool`
 
 Dentro de la salida de binning también se pueden encontrar resultados asociados a `DAS Tool`.
 
@@ -904,7 +654,7 @@ El archivo resumen de `DAS Tool` permite revisar qué bins fueron seleccionados 
 
 ---
 
-### 17.4 Evaluación de calidad con `CheckM2`
+### 16.4 Evaluación de calidad con `CheckM2`
 
 Los resultados de evaluación de calidad de los bins o MAGs se generan con `CheckM2`.
 
@@ -952,103 +702,7 @@ Un MAG de buena calidad suele tener alta completitud y baja contaminación.
 
 ---
 
-### 17.5 `MultiQC/`
-
-Esta carpeta contiene el reporte integrado generado por `MultiQC`.
-
-El archivo principal suele ser:
-
-```text
-multiqc_report.html
-```
-
-Este reporte puede abrirse en un navegador web y resume diferentes métricas del pipeline.
-
-Para ubicar el reporte:
-
-```bash
-find output -name "multiqc_report.html"
-```
-
----
-
-### 17.6 `Pipeline_info/`
-
-Esta carpeta contiene información sobre la ejecución del pipeline.
-
-Puede incluir:
-
-- Versión del pipeline.
-- Comando ejecutado.
-- Parámetros usados.
-- Reportes de ejecución.
-- Archivos de trazabilidad de Nextflow.
-
-Archivos comunes:
-
-```text
-execution_report.html
-execution_timeline.html
-execution_trace.txt
-pipeline_dag.html
-```
-
-Estos archivos son útiles para revisar:
-
-- Cuánto tiempo tardó cada proceso.
-- Cuánta memoria usó cada tarea.
-- Qué procesos fueron ejecutados.
-- Qué parámetros se usaron en la corrida.
-
----
-
-## 18. Comandos útiles para explorar resultados
-
-Listar carpetas principales:
-
-```bash
-ls -lh output
-```
-
-Buscar todos los bins generados:
-
-```bash
-find output -name "*.fa"
-```
-
-Buscar también archivos FASTA con otras extensiones:
-
-```bash
-find output \( -name "*.fa" -o -name "*.fna" -o -name "*.fasta" \)
-```
-
-Buscar archivos de CheckM2:
-
-```bash
-find output -iname "*checkm2*" -o -iname "*quality_report*"
-```
-
-Buscar reportes HTML:
-
-```bash
-find output -name "*.html"
-```
-
-Buscar archivos `.tsv`:
-
-```bash
-find output -name "*.tsv"
-```
-
-Contar cuántos bins FASTA se generaron:
-
-```bash
-find output \( -name "*.fa" -o -name "*.fna" -o -name "*.fasta" \) | wc -l
-```
-
----
-
-## 19. Interpretación básica de los MAGs
+## 18. Interpretación básica de los MAGs
 
 Después de obtener los resultados de `CheckM2`, se pueden clasificar los MAGs según completitud y contaminación.
 
@@ -1069,76 +723,3 @@ Un bin con 35% de completitud no se considera un MAG robusto para análisis gen�
 ```
 
 ---
-
-## 20. Recomendaciones finales
-
-Antes de ejecutar el job, revise cuidadosamente:
-
-1. Que las rutas en `samplesheet_reads.csv` existan.
-2. Que las rutas en `samplesheet_ensamblaje.csv` existan.
-3. Que `sample` e `id` coincidan entre ambos archivos.
-4. Que `group` coincida entre ambos archivos.
-5. Que el archivo `mag.config` tenga rutas de `workDir` y `cacheDir` dentro de su carpeta personal.
-6. Que el archivo `mag.sh` apunte a su propio `mag.config`, `samplesheet_reads.csv` y `samplesheet_ensamblaje.csv`.
-7. Que los archivos FASTQ estén comprimidos como `.fastq.gz`.
-8. Que los ensamblajes de Flye estén en formato `.fasta.gz`.
-
-Para validar rutas de lecturas largas:
-
-```bash
-ls -lh /hpcfs/home/cursos/metagenomica_moderna/estudiantes/Carpeta_personal/Taller_Binning/longReads/Secuencias/
-```
-
-Para validar rutas de ensamblajes:
-
-```bash
-ls -lh /hpcfs/home/cursos/metagenomica_moderna/estudiantes/Carpeta_personal/Taller_Binning/longReads/Ensamblajes/
-```
-
-Para validar los archivos de configuración:
-
-```bash
-ls -lh Data/
-```
-
-Una vez todo esté correcto, ejecute:
-
-```bash
-sbatch mag.sh
-```
-
----
-
-## 21. Resumen del tutorial
-
-En este tutorial se realizó un flujo de binning metagenómico de lecturas largas usando `nf-core/mag`.
-
-Se trabajó con:
-
-- Lecturas largas Oxford Nanopore.
-- Ensamblajes generados con `Flye`.
-- Archivo `samplesheet_reads.csv`.
-- Archivo `samplesheet_ensamblaje.csv`.
-- Archivo de configuración `mag.config`.
-- Job de SLURM `mag.sh`.
-
-El análisis ejecutó:
-
-- Uso de ensamblajes precomputados.
-- Binning con `MetaBAT2`, `MaxBin2` y `SemiBin2`.
-- Refinamiento de bins con `DAS Tool`.
-- Evaluación de MAGs con `CheckM2`.
-
-Los resultados principales se encuentran en:
-
-```text
-output/
-```
-
-y los archivos más importantes corresponden a:
-
-- Bins generados por cada herramienta.
-- Bins refinados por `DAS Tool`.
-- Reportes de calidad de `CheckM2`.
-- Reporte integrado de `MultiQC`.
-- Archivos de trazabilidad de `Nextflow`.
