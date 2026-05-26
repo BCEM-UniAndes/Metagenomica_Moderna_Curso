@@ -651,9 +651,7 @@ En este tutorial, como se usa:
 --postbinning_input refined_bins_only
 ```
 
-los bins refinados serán los más importantes para análisis posteriores.
-
-Los archivos principales serán bins refinados en formato FASTA.
+Los bins refinados serán los más importantes para análisis posteriores y los archivos principales serán bins refinados en formato FASTA.
 
 Ejemplo conceptual:
 
