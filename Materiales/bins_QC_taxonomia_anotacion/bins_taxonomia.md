@@ -104,7 +104,7 @@ Copie el siguiente contenido:
 source /hpcfs/home/cursos/metagenomica_moderna/conda/bin/activate
 conda activate gtdbtk-2.6.1
 
-batchfile="/hpcfs/home/cursos/metagenomica_moderna/Talleres/Prueba/bins_taxonomy/batchfile.txt"
+batchfile="/hpcfs/home/cursos/metagenomica_moderna/estudiantes/carpeta_personal/MAGs_taxonomy/batchfile.txt"
 
 gtdbtk classify_wf --batchfile ${batchfile} -x fa --skip_ani_screen --cpus 8 --out_dir gtdbtk_out
 
