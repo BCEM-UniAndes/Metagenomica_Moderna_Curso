@@ -20,7 +20,7 @@ La estructura recomendada es:
 MAGs_qc/
 ├── checkm2_out/   (almacenar los resultados generados por CheckM2)
 ├── gunc_out/      (almacenar los resultados generados por GUNC)
-└── MAGs_pass_qc/  (contendrá los MAGs finales que pasen los filtros de calidad y que podrán usarse en análisis posteriores.)
+└── MAGs_pass_qc/  (contendrá los MAGs finales que pasen los filtros de calidad y que podrán usarse en análisis posteriores)
 ```
 
 Puede crear esta estructura con:
@@ -29,7 +29,7 @@ Puede crear esta estructura con:
 mkdir -p MAGs_qc
 mkdir -p MAGs_qc/checkm2_out
 mkdir -p MAGs_qc/gunc_out
-mkdir -p MAGs_qc/MAGs_pass
+mkdir -p MAGs_qc/MAGs_pass_qc
 ```
 
 ## Copiar los bins reconstruidos al directorio de control de calidad
@@ -212,7 +212,7 @@ mag_source_dir = "/ruta/a/la/carpeta/all_bins/"
 destination_dir = "/ruta/a/MAGs_pass/"
 ```
 
-Después, activa el ambiente de Python correspondiente y ejecuta el script:
+Después, active el ambiente de Python correspondiente y ejecuta el script:
 
 ```bash
 conda activate python-env
