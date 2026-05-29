@@ -119,7 +119,7 @@ Copie el siguiente contenido:
 source /hpcfs/home/cursos/metagenomica_moderna/conda/bin/activate
 conda activate checkm2
 
-MAGs_folder=""/hpcfs/home/cursos/metagenomica_moderna/estudiantes/carpeta_peronal/MAGs_qc/all_bins""
+MAGs_folder="/hpcfs/home/cursos/metagenomica_moderna/estudiantes/carpeta_peronal/MAGs_qc/all_bins"
 
 checkm2 predict --threads 8 --input $MAGs_folder -x .fa --output-directory checkm2_out --remove_intermediates
 ```
