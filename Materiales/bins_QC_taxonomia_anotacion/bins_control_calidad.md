@@ -121,7 +121,8 @@ conda activate checkm2
 
 MAGs_folder="/hpcfs/home/cursos/metagenomica_moderna/estudiantes/carpeta_peronal/MAGs_qc/all_bins"
 
-checkm2 predict --threads 8 --input $MAGs_folder -x .fa --output-directory checkm2_out --remove_intermediates
+checkm2 predict --threads 8 --input $MAGs_folder -x .fa --output-directory checkm2_out --remove_intermediates --database_path /hpcfs/home/cursos/metagenomica_moderna/databases/CheckM2_database/uniref100.KO.1.dmnd 
+
 ```
 
 Este script estima la completitud y contaminación de cada MAG usando CheckM2. Los resultados se guardarán en la carpeta `checkm2_out`.
