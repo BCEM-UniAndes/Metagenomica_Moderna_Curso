@@ -25,7 +25,7 @@ mags_drep/
 
 Para ejecutar el flujo de dereplicación con dRep se necesitan dos archivos principales. El primero es un archivo de texto con las rutas de los MAGs que serán procesados. El segundo es un archivo `.csv` con la información de completitud y contaminación de cada MAG que se estimó anteriormente utilizado `checkM2`.
 
-## Archivo con las rutas de los MAGs
+### Archivo con las rutas de los MAGs
 
 dRep puede recibir directamente una lista de genomas usando comodines, por ejemplo `MAGs_folder/*.fa`. Sin embargo, en este taller se usará un archivo de texto con la ruta completa de cada MAG. Esta opción es más robusta y evita problemas cuando se trabaja con muchos archivos.
 
@@ -49,7 +49,7 @@ El archivo debe contener una ruta por línea, por ejemplo:
 /ruta/a/MAGs_pass_qc/SRR17048902_03.fa
 ```
 
-## Archivo con información de calidad de los MAGs
+### Archivo con información de calidad de los MAGs
 
 dRep utiliza las métricas de completitud y contaminación para seleccionar el genoma de mejor calidad dentro de cada grupo de MAGs similares. Aunque dRep puede calcular estas métricas directamente con `CheckM`, en este taller se usarán los valores obtenidos previamente con `CheckM2`, ya que estos fueron generados durante el control de calidad de los MAGs.
 
