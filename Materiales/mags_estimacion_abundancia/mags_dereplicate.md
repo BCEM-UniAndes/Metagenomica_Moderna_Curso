@@ -74,13 +74,13 @@ Antes de ejecutarlo, abra el script y verifique que la variable `input_file` apu
 Luego ejecute el script:
 
 ```bash
-bash genome_info_file.sh
+bash generate_genome_info_file.csv
 ```
 
 Revise que el archivo se haya generado correctamente:
 
 ```bash
-head genome_info_file.csv
+head generate_genome_info_file.csv
 ```
 
 El archivo `genome_info_file.csv` será usado por dRep mediante la opción `--genomeInfo`.
