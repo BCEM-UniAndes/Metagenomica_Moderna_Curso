@@ -38,7 +38,7 @@ ls -1 -d /hpcfs/home/cursos/metagenomica_moderna/Talleres/Prueba/bins_qc/MAGs_pa
 Revise el archivo generado con:
 
 ```bash
-head MAGs_path_file.txt
+head mags_path_file.txt
 ```
 
 El archivo debe contener una ruta por línea, por ejemplo:
