@@ -74,7 +74,7 @@ Antes de ejecutarlo, abra el script y verifique que la variable `input_file` apu
 Luego ejecute el script:
 
 ```bash
-bash get_genome_info_file.sh
+bash genome_info_file.sh
 ```
 
 Revise que el archivo se haya generado correctamente:
