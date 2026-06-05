@@ -72,7 +72,7 @@ module load bowtie2/2.4.5
 
 representative_genomes="/hpcfs/home/cursos/metagenomica_moderna/Talleres/Prueba/mags_abundance_estimation/representative_genomes.fasta"
 
-bowtie2-build $representative_genomes bowtie_index/INDEX
+bowtie2-build $representative_genomes bowtie_index_out/INDEX
 ```
 
 Después de crear y guardar el script, dele permisos de ejecución y envíelo al clúster:
